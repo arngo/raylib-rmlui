@@ -1,59 +1,9 @@
 #include <RmlUi/Core.h>
 #include <RmlUi/Core/RenderInterface.h>
 #include <raylib/rlgl.h>
+#include <raylib/raylib.h>
 
-void RmlUiSFMLRenderer::RenderGeometry(Rml::Vertex* vertices, int num_vertices, int* indices, int num_indices, const Rml::TextureHandle texture, const Rml::Vector2f& translation)
-{
-    MyWindow->pushGLStates();
-    initViewport();
-
-    rlTranslatef(translation.x, translation.y, 0);
-
-    Rml::Vector<Rml::Vector2f> Positions(num_vertices);
-    Rml::Vector<Rml::Colourb> Colors(num_vertices);
-    Rml::Vector<Rml::Vector2f> TexCoords(num_vertices);
-
-    for(int i = 0; i < num_vertices; i++)
-    {
-        Positions[i] = vertices[i].position;
-        Colors[i] = vertices[i].colour;
-        TexCoords[i] = vertices[i].tex_coord;
-    };
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-    glVertexPointer(2, GL_FLOAT, 0, &Positions[0]);
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, &Colors[0]);
-    glTexCoordPointer(2, GL_FLOAT, 0, &TexCoords[0]);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    sf::Texture *sfTexture = (sf::Texture *)texture;
-
-    if(sfTexture)
-    {
-        sf::Texture::bind(sfTexture);
-    }
-    else
-    {
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        glBindTexture(GL_TEXTURE_2D, 0);
-    };
-
-    glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, indices);
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-    glColor4f(1, 1, 1, 1);
-
-    MyWindow->popGLStates();
-}
-
+// Called by RmlUi when it wants to render geometry that the application does not wish to optimise.
 void RmlUiRaylibRenderer::RenderGeometry(Rml::Vertex* vertices, int num_vertices, int* indices, int num_indices, const Rml::TextureHandle texture, const Rml::Vector2f& translation)
 {
     // SDL uses shaders that we need to disable here  
@@ -139,4 +89,49 @@ void RmlUiRaylibRenderer::RenderGeometry(Rml::Vertex* vertices, int num_vertices
     rlDisableColorBlend();
     //SDL_SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_NONE);
     //SDL_RenderDrawPoint(mRenderer, -1, -1);
+}
+
+// Called by RmlUi when it wants to enable or disable scissoring to clip content.
+void RmlUiRaylibRenderer::EnableScissorRegion(bool enable) {
+    if (enable) {
+        rlEnableScissorTest();
+    } else {
+        rlDisableScissorTest();
+    }
+}
+
+// Called by RmlUi when it wants to change the scissor region.
+void RmlUiRaylibRenderer::SetScissorRegion(int x, int y, int width, int height) {
+    rlScissor(x, GetScreenHeight() - (y + height), width, height);
+}
+
+
+// Called by RmlUi when a texture is required by the library.
+bool RmlUiRaylibRenderer::LoadTexture(Rml::TextureHandle& texture_handle, Rml::Vector2i& texture_dimensions, const Rml::String& source) {
+    Texture2D rl_texture = LoadTexture(source);
+
+    if (rl_texture) {
+        texture_handle = (Rml::TextureHandle) &rl_texture;
+        texture_dimensions = Rml::Vector2i(rl_texture.width, rl_texture.height);
+        return true;
+    }
+    return false;
+}
+
+// Called by RmlUi when a texture is required to be built from an internally-generated sequence of pixels.
+bool RmlUiRaylibRenderer::GenerateTexture(Rml::TextureHandle& texture_handle, const Rml::byte* source, const Rml::Vector2i& source_dimensions) {
+    RenderTexture2D rl_rendertexture = LoadRenderTexture(source_dimensions.x, source_dimensions.y);
+
+    if (rl_rendertexture) {
+        //rlUpdateTexture(rl_rendertexture.texture.id, 0, 0, source_dimensions.x, source_dimensions.y, RL_PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, source);
+        UpdateTexture(rl_rendertexture.texture, source);
+        texture_handle = (Rml::TextureHandle) &rl_rendertexture.texture;
+        return true;
+    }
+    return false;
+}
+
+// Called by RmlUi when a loaded texture is no longer required.
+void RmlUiRaylibRenderer::ReleaseTexture(Rml::TextureHandle texture_handle) {
+    UnloadTexture((Texture2D *)texture_handle);
 }
