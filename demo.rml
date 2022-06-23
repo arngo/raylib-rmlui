@@ -15,13 +15,22 @@
 	{
 		display: block;
 		height: 150px;
-		width: 200px; 
+		width: 300px; 
 		background-color: #f00;
+		font-family: Exo;
+		font-size: 25px;
+	}
+	p
+	{
+		font-family: Blobmoji;
+		color: #fff;
+		font-size: 50px;
 	}
 </style>
 </head>
 <body>
-	<div/>
+	<div>Poggies it works<p>🥰</p></div>
+
 </body>
 </rml>
 

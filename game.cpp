@@ -22,6 +22,7 @@
 
 #include <raylib.h>
 #include <RmlUi/Core.h>
+//#include <RmlUi/Debugger.h>
 #include "RmlUi_Renderer_Raylib.h"
 #include "RmlUi_Platform_Raylib.h"
 
@@ -44,6 +45,8 @@ int main(void)
 	//auto render_interface = std::make_unique<RenderInterface_Raylib>();
 	RenderInterface_Raylib render_interface;
 
+	render_interface.SetViewport(screenWidth, screenHeight);
+
 	Rml::SetSystemInterface(&system_interface);
 	Rml::SetRenderInterface(&render_interface);
 
@@ -53,6 +56,11 @@ int main(void)
 	
 	if (!context)
 		return 0;
+
+	//Rml::Debugger::Initialise(context);
+
+	Rml::LoadFontFace("exo.regular.otf");
+	Rml::LoadFontFace("Blobmoji.ttf");
 
 	Rml::ElementDocument* document = context->LoadDocument("demo.rml");
 	if (document)
@@ -75,10 +83,13 @@ int main(void)
 
 		ClearBackground(RAYWHITE);
 
+		render_interface.BeginFrame();
+
 		context->Render();
 
-		DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+		DrawText("Congrats! You created your first window!", 190, 200, 20, ORANGE);
 
+		render_interface.EndFrame();
 		EndDrawing();
 		//----------------------------------------------------------------------------------
 	}
