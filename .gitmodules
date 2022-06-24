@@ -1,0 +1,6 @@
+[submodule "RmlUi"]
+	path = RmlUi
+	url = https://github.com/mikke89/RmlUi
+[submodule "raylib"]
+	path = raylib
+	url = https://github.com/raysan5/raylib
