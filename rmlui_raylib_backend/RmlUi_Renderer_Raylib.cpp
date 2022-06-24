@@ -37,7 +37,7 @@
 #include <string.h>
 
 //#if !defined(GLAD_GL_H_)
-    #include "external/glad.h"
+    #include <external/glad.h>
 	#define RMLUI_SHADER_HEADER "#version 330\n"
 //#endif
 

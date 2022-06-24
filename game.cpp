@@ -18,7 +18,7 @@
  *   Copyright (c) 2013-2016 Ramon Santamaria (@raysan5)
  *
  ********************************************************************************************/
-
+#define RMLUI_STATIC_LIB
 
 #include <raylib.h>
 #include <RmlUi/Core.h>
@@ -59,8 +59,8 @@ int main(void)
 
 	//Rml::Debugger::Initialise(context);
 
-	Rml::LoadFontFace("exo.regular.otf");
-	Rml::LoadFontFace("Blobmoji.ttf");
+	Rml::LoadFontFace("assets/fonts/exo.regular.otf");
+	Rml::LoadFontFace("assets/fonts/Blobmoji.ttf");
 
 	Rml::ElementDocument* document = context->LoadDocument("demo.rml");
 	if (document)
