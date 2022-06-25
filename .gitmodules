@@ -4,3 +4,6 @@
 [submodule "raylib"]
 	path = raylib
 	url = https://github.com/raysan5/raylib
+[submodule "freetype"]
+	path = freetype
+	url = https://gitlab.com/freetype/freetype.git

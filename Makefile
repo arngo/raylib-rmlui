@@ -1,6 +1,6 @@
 build-desktop:
 	mkdir -p build/tux
-	g++ -o build/tux/game game.cpp rmlui_raylib_backend/RmlUi_Platform_Raylib.cpp rmlui_raylib_backend/RmlUi_Renderer_Raylib.cpp -Irmlui_raylib_backend/ -Iraylib/src/ -IRmlUi/Include/ vendor/tux/lib/libraylib.a vendor/tux/lib/RmlUi/libRmlCore.a -lfreetype -lGL -lm -lpthread -ldl -lrt -lX11 -DPLATFORM_DESKTOP
+	zig c++ -o build/tux/game game.cpp rmlui_raylib_backend/RmlUi_Platform_Raylib.cpp rmlui_raylib_backend/RmlUi_Renderer_Raylib.cpp -Irmlui_raylib_backend/ -Iraylib/src/ -IRmlUi/Include/ vendor/tux/lib/libraylib.a vendor/tux/lib/RmlUi/libRmlCore.a -lfreetype -lGL -lm -lpthread -ldl -lrt -lX11 -DPLATFORM_DESKTOP
 
 build-web:
 	mkdir -p build/web
@@ -18,10 +18,15 @@ raylib-web:
 	cd raylib/src && make clean && make PLATFORM=PLATFORM_WEB -e
 	cp raylib/src/libraylib.a vendor/web/lib/
 
-rmlui-desktop:
+rmlui-tux:
 	mkdir -p vendor/tux/lib/RmlUi/
 	rm -rf vendor/tux/lib/RmlUi/*
-	cd vendor/tux/lib/RmlUi && cmake -DBUILD_SHARED_LIBS=OFF -DENABLE_PRECOMPILED_HEADERS=ON -DRmlUi_DIR=./ ../../../../RmlUi && make -j2
+	cd vendor/tux/lib/RmlUi && CXX='zig c++' cmake -DBUILD_SHARED_LIBS=OFF -DENABLE_PRECOMPILED_HEADERS=OFF -DRmlUi_DIR=./ ../../../../RmlUi && make -j2
+
+rmlui-win:
+	mkdir -p vendor/win/lib/RmlUi/
+	rm -rf vendor/win/lib/RmlUi/*
+	cd vendor/win/lib/RmlUi && CXX='zig c++ -target x86_64-windows-gnu' cmake -DBUILD_SHARED_LIBS=OFF -DENABLE_PRECOMPILED_HEADERS=OFF -DRmlUi_DIR=./ ../../../../RmlUi && make -j2
 
 rmlui-web:
 	mkdir -p vendor/web/lib/RmlUi/
