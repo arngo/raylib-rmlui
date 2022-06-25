@@ -20,10 +20,10 @@ raylib-web:
 
 rmlui-desktop:
 	mkdir -p vendor/tux/lib/RmlUi/
-	rm -f vendor/tux/lib/RmlUi/*
+	rm -rf vendor/tux/lib/RmlUi/*
 	cd vendor/tux/lib/RmlUi && cmake -DBUILD_SHARED_LIBS=OFF -DENABLE_PRECOMPILED_HEADERS=ON -DRmlUi_DIR=./ ../../../../RmlUi && make -j2
 
 rmlui-web:
 	mkdir -p vendor/web/lib/RmlUi/
-	rm -f vendor/web/lib/RmlUi/*
+	rm -rf vendor/web/lib/RmlUi/*
 	cd vendor/web/lib/RmlUi && emcmake cmake -DRmlUi_DIR=./ -DBUILD_SHARED_LIBS=OFF ../../../../RmlUi && make -j2
