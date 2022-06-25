@@ -60,6 +60,13 @@
 #define GL_RGBA8 0x8058
 #define GL_FALSE 0
 #define GL_TRUE 1
+
+#if defined(PLATFORM_DESKTOP)
+	#define INTERNAL_FORMAT GL_RGBA8
+#elif defined(PLATFORM_WEB)
+	#define INTERNAL_FORMAT GL_RGBA
+#endif
+
 //#if defined RMLUI_PLATFORM_WIN32
 //	#include "RmlUi_Include_Windows.h"
 //	#include <gl/Gl.h>
@@ -712,7 +719,7 @@ bool RenderInterface_Raylib::GenerateTexture(Rml::TextureHandle& texture_handle,
 
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 
-	GLint internal_format = GL_RGBA8;
+	GLint internal_format = INTERNAL_FORMAT;
 	glTexImage2D(GL_TEXTURE_2D, 0, internal_format, source_dimensions.x, source_dimensions.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, source);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

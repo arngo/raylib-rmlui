@@ -25,6 +25,7 @@
 //#include <RmlUi/Debugger.h>
 #include <RmlUi_Renderer_Raylib.h>
 #include <RmlUi_Platform_Raylib.h>
+#include <rlgl.h>
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -60,7 +61,7 @@ int main(void)
 	//Rml::Debugger::Initialise(context);
 
 	Rml::LoadFontFace("assets/fonts/exo.regular.otf");
-	Rml::LoadFontFace("assets/fonts/Blobmoji.ttf");
+	//Rml::LoadFontFace("assets/fonts/Blobmoji.ttf");
 
 	Rml::ElementDocument* document = context->LoadDocument("assets/rml/demo.rml");
 	if (document)
