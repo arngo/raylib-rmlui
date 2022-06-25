@@ -26,6 +26,8 @@
  *
  */
 
+#define RMLUI_STATIC_LIB
+
 #include <RmlUi/Core/RenderInterface.h>
 #include <RmlUi/Core/Types.h>
 

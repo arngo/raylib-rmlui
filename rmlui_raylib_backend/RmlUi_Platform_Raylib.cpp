@@ -1,3 +1,4 @@
+#define RMLUI_STATIC_LIB
 
 #include "RmlUi_Platform_Raylib.h"
 #include <RmlUi/Core/Context.h>

@@ -5,11 +5,9 @@
 	body
 	{
 		position: absolute;
-		top: 50px;
-		left: 50px;
-		width: 500px;
-		height: 500px;
-		background-color: #ccc;
+		width: 100%;
+		height: 100%;
+		background-color: #eee;
 	}
 	div
 	{
@@ -18,7 +16,11 @@
 		width: 300px; 
 		background-color: #f00;
 		font-family: Exo;
-		font-size: 25px;
+		font-size: 30px;
+		margin: 40px;
+		padding: 45px;
+		border: 0px;
+		border-radius: 30px;
 	}
 	p
 	{
@@ -29,8 +31,10 @@
 </style>
 </head>
 <body>
-	<div>Poggies it works<p>🥰</p></div>
-
+	<div>Poggies it works</div>
+	<div>
+	<p>🥰</p>
+	</div>
 </body>
 </rml>
 

@@ -1,3 +1,5 @@
+#define RMLUI_STATIC_LIB
+
 #include <RmlUi/Core/Input.h>
 #include <RmlUi/Core/SystemInterface.h>
 #include <RmlUi/Core/Types.h>

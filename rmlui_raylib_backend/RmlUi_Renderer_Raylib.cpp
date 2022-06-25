@@ -26,6 +26,7 @@
  *
  */
 
+#define RMLUI_STATIC_LIB
 
 
 #include "RmlUi_Renderer_Raylib.h"
@@ -37,15 +38,26 @@
 #include <string.h>
 
 //#if !defined(GLAD_GL_H_)
+#if defined(PLATFORM_DESKTOP)
     #include <external/glad.h>
 	#define RMLUI_SHADER_HEADER "#version 330\n"
-//#endif
+#elif defined(PLATFORM_WEB)
+	#define GL_GLEXT_PROTOTYPES
+    #include <GLES2/gl2.h>              // OpenGL ES 2.0 library
+    #include <GLES2/gl2ext.h>           // OpenGL ES 2.0 extensions library
+	#define RMLUI_SHADER_HEADER "#version 100\n"
+	#define glBindVertexArray       glBindVertexArrayOES
+	#define glGenVertexArrays       glGenVertexArraysOES
+	#define glDeleteVertexArrays    glDeleteVertexArraysOES
+	#define GL_VERTEX_ARRAY_BINDING GL_VERTEX_ARRAY_BINDING_OES
+#endif
 
 
 #define GL_UNSIGNED_INT 0x1405
 #define GL_UNSIGNED_BYTE 0x1401
 #define GL_TEXTURE_2D 0x0DE1
 #define GL_FLOAT 0x1406
+#define GL_RGBA8 0x8058
 #define GL_FALSE 0
 #define GL_TRUE 1
 //#if defined RMLUI_PLATFORM_WIN32
@@ -67,6 +79,7 @@
 
 #define GL_CLAMP_TO_EDGE 0x812F
 
+#if defined(PLATFORM_DESKTOP)
 static const char* shader_main_vertex = RMLUI_SHADER_HEADER R"(
 uniform vec2 _translate;
 uniform mat4 _transform;
@@ -88,7 +101,25 @@ void main() {
     gl_Position = outPos;
 }
 )";
+#elif defined(PLATFORM_WEB)
+static const char* shader_main_vertex = RMLUI_SHADER_HEADER R"(
+precision mediump float;
+uniform mat4 _transform;
+attribute vec2 _translate;
+attribute vec2 inPosition;
+attribute vec4 inColor0;
+varying vec2 fragTexCoord;
+varying vec4 fragColor;
+void main()
+{
+    fragTexCoord = inPosition;
+    fragColor = inColor0;
+    gl_Position = _transform * vec4(_translate.xy,0,1);
+}
+)";
+#endif
 
+#if defined(PLATFORM_DESKTOP)
 static const char* shader_main_fragment_texture = RMLUI_SHADER_HEADER R"(
 uniform sampler2D _tex;
 in vec2 fragTexCoord;
@@ -101,6 +132,20 @@ void main() {
 	finalColor = fragColor * texColor;
 }
 )";
+#elif defined(PLATFORM_WEB)
+static const char* shader_main_fragment_texture = RMLUI_SHADER_HEADER R"(
+precision mediump float;
+uniform sampler2D _tex;
+varying vec2 fragTexCoord;
+varying vec4 fragColor;
+void main()
+{
+    gl_FragColor = fragColor * texture2D(_tex, fragTexCoord.st);
+}
+)";
+#endif
+
+#if defined(PLATFORM_DESKTOP)
 static const char* shader_main_fragment_color = RMLUI_SHADER_HEADER R"(
 in vec2 fragTexCoord;
 in vec4 fragColor;
@@ -111,6 +156,18 @@ void main() {
 	finalColor = fragColor;
 }
 )";
+#elif defined(PLATFORM_WEB)
+static const char* shader_main_fragment_color = RMLUI_SHADER_HEADER R"(
+precision mediump float;
+varying vec2 fragTexCoord;
+varying vec4 fragColor;
+
+
+void main() {
+	gl_FragColor = fragColor;
+}
+)";
+#endif
 
 namespace Gfx {
 

@@ -23,8 +23,8 @@
 #include <raylib.h>
 #include <RmlUi/Core.h>
 //#include <RmlUi/Debugger.h>
-#include "RmlUi_Renderer_Raylib.h"
-#include "RmlUi_Platform_Raylib.h"
+#include <RmlUi_Renderer_Raylib.h>
+#include <RmlUi_Platform_Raylib.h>
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -38,7 +38,7 @@ int main(void)
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
-	SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+	//SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
 									//--------------------------------------------------------------------------------------
 	//auto system_interface = std::make_unique<SystemInterface_Raylib>();
 	SystemInterface_Raylib system_interface;
@@ -62,7 +62,7 @@ int main(void)
 	Rml::LoadFontFace("assets/fonts/exo.regular.otf");
 	Rml::LoadFontFace("assets/fonts/Blobmoji.ttf");
 
-	Rml::ElementDocument* document = context->LoadDocument("demo.rml");
+	Rml::ElementDocument* document = context->LoadDocument("assets/rml/demo.rml");
 	if (document)
 		document->Show();
 	else
@@ -76,6 +76,7 @@ int main(void)
 		// TODO: Update your variables here
 		//----------------------------------------------------------------------------------
 
+		document->ReloadStyleSheet();
 		context->Update();
 		// Draw
 		//----------------------------------------------------------------------------------
@@ -88,6 +89,8 @@ int main(void)
 		context->Render();
 
 		DrawText("Congrats! You created your first window!", 190, 200, 20, ORANGE);
+
+		DrawFPS(10, 10);
 
 		render_interface.EndFrame();
 		EndDrawing();
