@@ -1,4 +1,4 @@
 a.out
-vendor/tux
-vendor/web
+vendor
+!vendor/shell.html
 build
