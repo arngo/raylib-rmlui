@@ -62,7 +62,7 @@ int main(void)
 
 	Rml::DataModelHandle model;
 
-	//SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+	SetTargetFPS(800);               // Set our game to run at 60 frames-per-second
 	//--------------------------------------------------------------------------------------
 	//auto system_interface = std::make_unique<SystemInterface_Raylib>();
 	SystemInterface_Raylib system_interface;
