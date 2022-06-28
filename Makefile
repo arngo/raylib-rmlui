@@ -4,7 +4,7 @@ build-desktop:
 
 build-web:
 	mkdir -p build/web
-	emcc -o build/web/index.html game.cpp rmlui_raylib_backend/RmlUi_Platform_Raylib.cpp rmlui_raylib_backend/RmlUi_Renderer_Raylib.cpp -Os -Wall -I. -Irmlui_raylib_backend/ -Iraylib/src/ -IRmlUi/Include/ -L. vendor/web/lib/libraylib.a vendor/web/lib/RmlUi/libRmlCore.a -s USE_GLFW=3 -s ASYNCIFY --shell-file vendor/shell.html --preload-file assets -s TOTAL_MEMORY=67108864 -DPLATFORM_WEB -s USE_FREETYPE=1
+	em++ -o build/web/index.html game.cpp rmlui_raylib_backend/RmlUi_Platform_Raylib.cpp rmlui_raylib_backend/RmlUi_Renderer_Raylib.cpp -Os -Wall -I. -Irmlui_raylib_backend/ -Iraylib/src/ -IRmlUi/Include/ -L. vendor/web/lib/libraylib.a vendor/web/lib/RmlUi/libRmlCore.a -s USE_GLFW=3 -s ASYNCIFY --shell-file vendor/shell.html --preload-file assets -s TOTAL_MEMORY=67108864 -DPLATFORM_WEB -s USE_FREETYPE=1
 
 raylib-desktop:
 	mkdir -p vendor/tux/lib
