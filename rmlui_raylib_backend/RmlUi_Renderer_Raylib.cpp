@@ -28,7 +28,6 @@
 
 #define RMLUI_STATIC_LIB
 
-
 #include "RmlUi_Renderer_Raylib.h"
 #include <RmlUi/Core/Core.h>
 #include <RmlUi/Core/FileInterface.h>
@@ -37,6 +36,7 @@
 #include <rlgl.h>
 #include <string.h>
 
+#define GL_CLAMP_TO_EDGE 0x812F
 #define GL_UNSIGNED_INT 0x1405
 #define GL_UNSIGNED_BYTE 0x1401
 #define GL_TEXTURE_2D 0x0DE1
@@ -45,14 +45,13 @@
 #define GL_FALSE 0
 #define GL_TRUE 1
 
-//#if !defined(GLAD_GL_H_)
 #if defined(PLATFORM_DESKTOP)
-    #include <external/glad.h>
+	#include <external/glad.h>
 	#define RMLUI_SHADER_HEADER "#version 330\n"
 #elif defined(PLATFORM_WEB)
 	#define GL_GLEXT_PROTOTYPES
-    #include <GLES2/gl2.h>              // OpenGL ES 2.0 library
-    #include <GLES2/gl2ext.h>           // OpenGL ES 2.0 extensions library
+	#include <GLES2/gl2.h>              // OpenGL ES 2.0 library
+	#include <GLES2/gl2ext.h>           // OpenGL ES 2.0 extensions library
 	#define RMLUI_SHADER_HEADER "#version 100\n"
 	#define glBindVertexArray       glBindVertexArrayOES
 	#define glGenVertexArrays       glGenVertexArraysOES
@@ -60,32 +59,12 @@
 	#define GL_VERTEX_ARRAY_BINDING GL_VERTEX_ARRAY_BINDING_OES
 #endif
 
-
-
+// Web doesnt have RGBA8
 #if defined(PLATFORM_DESKTOP)
 	#define INTERNAL_FORMAT GL_RGBA8
 #elif defined(PLATFORM_WEB)
 	#define INTERNAL_FORMAT GL_RGBA
 #endif
-
-//#if defined RMLUI_PLATFORM_WIN32
-//	#include "RmlUi_Include_Windows.h"
-//	#include <gl/Gl.h>
-//	#include <gl/Glu.h>
-//#elif defined RMLUI_PLATFORM_MACOSX
-//	#include <AGL/agl.h>
-//	#include <OpenGL/gl.h>
-//	#include <OpenGL/glext.h>
-//	#include <OpenGL/glu.h>
-//#elif defined RMLUI_PLATFORM_UNIX
-//	#include "RmlUi_Include_Xlib.h"
-//	#include <GL/gl.h>
-//	#include <GL/glext.h>
-//	#include <GL/glu.h>
-//	#include <GL/glx.h>
-//#endif
-
-#define GL_CLAMP_TO_EDGE 0x812F
 
 #if defined(PLATFORM_DESKTOP)
 static const char* shader_main_vertex = RMLUI_SHADER_HEADER R"(
@@ -179,219 +158,219 @@ void main() {
 
 namespace Gfx {
 
-enum class ProgramUniform { Translate, Transform, Tex, Count };
-static const char* const program_uniform_names[(size_t)ProgramUniform::Count] = {"_translate", "_transform", "_tex"};
+	enum class ProgramUniform { Translate, Transform, Tex, Count };
+	static const char* const program_uniform_names[(size_t)ProgramUniform::Count] = {"_translate", "_transform", "_tex"};
 
-enum class VertexAttribute { Position, Color0, TexCoord0, Count };
-static const char* const vertex_attribute_names[(size_t)VertexAttribute::Count] = {"inPosition", "inColor0", "inTexCoord0"};
+	enum class VertexAttribute { Position, Color0, TexCoord0, Count };
+	static const char* const vertex_attribute_names[(size_t)VertexAttribute::Count] = {"inPosition", "inColor0", "inTexCoord0"};
 
-struct CompiledGeometryData {
-	GLuint texture;
-	GLuint vao;
-	GLuint vbo;
-	GLuint ibo;
-	GLsizei draw_count;
-};
+	struct CompiledGeometryData {
+		GLuint texture;
+		GLuint vao;
+		GLuint vbo;
+		GLuint ibo;
+		GLsizei draw_count;
+	};
 
-struct ProgramData {
-	GLuint id;
-	GLint uniform_locations[(size_t)ProgramUniform::Count];
-};
+	struct ProgramData {
+		GLuint id;
+		GLint uniform_locations[(size_t)ProgramUniform::Count];
+	};
 
-struct ShadersData {
-	ProgramData program_color;
-	ProgramData program_texture;
-	GLuint shader_main_vertex;
-	GLuint shader_main_fragment_color;
-	GLuint shader_main_fragment_texture;
-};
+	struct ShadersData {
+		ProgramData program_color;
+		ProgramData program_texture;
+		GLuint shader_main_vertex;
+		GLuint shader_main_fragment_color;
+		GLuint shader_main_fragment_texture;
+	};
 
-static void CheckGLError(const char* operation_name)
-{
+	static void CheckGLError(const char* operation_name)
+	{
 #ifdef RMLUI_DEBUG
-	GLenum error_code = glGetError();
-	if (error_code != GL_NO_ERROR)
-	{
-		static const Rml::Pair<GLenum, const char*> error_names[] = {{GL_INVALID_ENUM, "GL_INVALID_ENUM"}, {GL_INVALID_VALUE, "GL_INVALID_VALUE"},
-			{GL_INVALID_OPERATION, "GL_INVALID_OPERATION"}, {GL_OUT_OF_MEMORY, "GL_OUT_OF_MEMORY"}};
-		const char* error_str = "''";
-		for (auto& err : error_names)
+		GLenum error_code = glGetError();
+		if (error_code != GL_NO_ERROR)
 		{
-			if (err.first == error_code)
+			static const Rml::Pair<GLenum, const char*> error_names[] = {{GL_INVALID_ENUM, "GL_INVALID_ENUM"}, {GL_INVALID_VALUE, "GL_INVALID_VALUE"},
+				{GL_INVALID_OPERATION, "GL_INVALID_OPERATION"}, {GL_OUT_OF_MEMORY, "GL_OUT_OF_MEMORY"}};
+			const char* error_str = "''";
+			for (auto& err : error_names)
 			{
-				error_str = err.second;
-				break;
+				if (err.first == error_code)
+				{
+					error_str = err.second;
+					break;
+				}
 			}
+			Rml::Log::Message(Rml::Log::LT_ERROR, "OpenGL error during %s. Error code 0x%x (%s).", operation_name, error_code, error_str);
 		}
-		Rml::Log::Message(Rml::Log::LT_ERROR, "OpenGL error during %s. Error code 0x%x (%s).", operation_name, error_code, error_str);
-	}
 #endif
-	(void)operation_name;
-}
-
-// Create the shader, 'shader_type' is either GL_VERTEX_SHADER or GL_FRAGMENT_SHADER.
-static GLuint CreateShader(GLenum shader_type, const char* code_string)
-{
-	GLuint id = glCreateShader(shader_type);
-
-	glShaderSource(id, 1, (const GLchar**)&code_string, NULL);
-	glCompileShader(id);
-
-	GLint status = 0;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-		GLint info_log_length = 0;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &info_log_length);
-		char* info_log_string = new char[info_log_length + 1];
-		glGetShaderInfoLog(id, info_log_length, NULL, info_log_string);
-
-		Rml::Log::Message(Rml::Log::LT_ERROR, "Compile failure in OpenGL shader: %s", info_log_string);
-		delete[] info_log_string;
-		glDeleteShader(id);
-		return 0;
+		(void)operation_name;
 	}
 
-	CheckGLError("CreateShader");
-
-	return id;
-}
-
-static void BindAttribLocations(GLuint program)
-{
-	for (GLuint i = 0; i < (GLuint)VertexAttribute::Count; i++)
+	// Create the shader, 'shader_type' is either GL_VERTEX_SHADER or GL_FRAGMENT_SHADER.
+	static GLuint CreateShader(GLenum shader_type, const char* code_string)
 	{
-		glBindAttribLocation(program, i, vertex_attribute_names[i]);
-	}
-	CheckGLError("BindAttribLocations");
-}
+		GLuint id = glCreateShader(shader_type);
 
-static bool CreateProgram(GLuint vertex_shader, GLuint fragment_shader, ProgramData& out_program)
-{
-	GLuint id = glCreateProgram();
-	RMLUI_ASSERT(id);
+		glShaderSource(id, 1, (const GLchar**)&code_string, NULL);
+		glCompileShader(id);
 
-	BindAttribLocations(id);
-
-	glAttachShader(id, vertex_shader);
-	glAttachShader(id, fragment_shader);
-
-	glLinkProgram(id);
-
-	glDetachShader(id, vertex_shader);
-	glDetachShader(id, fragment_shader);
-
-	GLint status = 0;
-	glGetProgramiv(id, GL_LINK_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-		GLint info_log_length = 0;
-		glGetProgramiv(id, GL_INFO_LOG_LENGTH, &info_log_length);
-		char* info_log_string = new char[info_log_length + 1];
-		glGetProgramInfoLog(id, info_log_length, NULL, info_log_string);
-
-		Rml::Log::Message(Rml::Log::LT_ERROR, "OpenGL program linking failure: %s", info_log_string);
-		delete[] info_log_string;
-		glDeleteProgram(id);
-		return false;
-	}
-
-	out_program = {};
-	out_program.id = id;
-
-	// Make a lookup table for the uniform locations.
-	GLint num_active_uniforms = 0;
-	glGetProgramiv(id, GL_ACTIVE_UNIFORMS, &num_active_uniforms);
-
-	constexpr size_t name_size = 64;
-	GLchar name_buf[name_size] = "";
-	for (int unif = 0; unif < num_active_uniforms; ++unif)
-	{
-		GLint array_size = 0;
-		GLenum type = 0;
-		GLsizei actual_length = 0;
-		glGetActiveUniform(id, unif, name_size, &actual_length, &array_size, &type, name_buf);
-		GLint location = glGetUniformLocation(id, name_buf);
-
-		// See if we have the name in our pre-defined name list.
-		ProgramUniform program_uniform = ProgramUniform::Count;
-		for (int i = 0; i < (int)ProgramUniform::Count; i++)
+		GLint status = 0;
+		glGetShaderiv(id, GL_COMPILE_STATUS, &status);
+		if (status == GL_FALSE)
 		{
-			const char* uniform_name = program_uniform_names[i];
-			if (strcmp(name_buf, uniform_name) == 0)
-			{
-				program_uniform = (ProgramUniform)i;
-				break;
-			}
+			GLint info_log_length = 0;
+			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &info_log_length);
+			char* info_log_string = new char[info_log_length + 1];
+			glGetShaderInfoLog(id, info_log_length, NULL, info_log_string);
+
+			Rml::Log::Message(Rml::Log::LT_ERROR, "Compile failure in OpenGL shader: %s", info_log_string);
+			delete[] info_log_string;
+			glDeleteShader(id);
+			return 0;
 		}
 
-		if ((size_t)program_uniform < (size_t)ProgramUniform::Count)
+		CheckGLError("CreateShader");
+
+		return id;
+	}
+
+	static void BindAttribLocations(GLuint program)
+	{
+		for (GLuint i = 0; i < (GLuint)VertexAttribute::Count; i++)
 		{
-			out_program.uniform_locations[(size_t)program_uniform] = location;
+			glBindAttribLocation(program, i, vertex_attribute_names[i]);
 		}
-		else
+		CheckGLError("BindAttribLocations");
+	}
+
+	static bool CreateProgram(GLuint vertex_shader, GLuint fragment_shader, ProgramData& out_program)
+	{
+		GLuint id = glCreateProgram();
+		RMLUI_ASSERT(id);
+
+		BindAttribLocations(id);
+
+		glAttachShader(id, vertex_shader);
+		glAttachShader(id, fragment_shader);
+
+		glLinkProgram(id);
+
+		glDetachShader(id, vertex_shader);
+		glDetachShader(id, fragment_shader);
+
+		GLint status = 0;
+		glGetProgramiv(id, GL_LINK_STATUS, &status);
+		if (status == GL_FALSE)
 		{
-			Rml::Log::Message(Rml::Log::LT_ERROR, "OpenGL program uses unknown uniform '%s'.", name_buf);
+			GLint info_log_length = 0;
+			glGetProgramiv(id, GL_INFO_LOG_LENGTH, &info_log_length);
+			char* info_log_string = new char[info_log_length + 1];
+			glGetProgramInfoLog(id, info_log_length, NULL, info_log_string);
+
+			Rml::Log::Message(Rml::Log::LT_ERROR, "OpenGL program linking failure: %s", info_log_string);
+			delete[] info_log_string;
+			glDeleteProgram(id);
 			return false;
 		}
+
+		out_program = {};
+		out_program.id = id;
+
+		// Make a lookup table for the uniform locations.
+		GLint num_active_uniforms = 0;
+		glGetProgramiv(id, GL_ACTIVE_UNIFORMS, &num_active_uniforms);
+
+		constexpr size_t name_size = 64;
+		GLchar name_buf[name_size] = "";
+		for (int unif = 0; unif < num_active_uniforms; ++unif)
+		{
+			GLint array_size = 0;
+			GLenum type = 0;
+			GLsizei actual_length = 0;
+			glGetActiveUniform(id, unif, name_size, &actual_length, &array_size, &type, name_buf);
+			GLint location = glGetUniformLocation(id, name_buf);
+
+			// See if we have the name in our pre-defined name list.
+			ProgramUniform program_uniform = ProgramUniform::Count;
+			for (int i = 0; i < (int)ProgramUniform::Count; i++)
+			{
+				const char* uniform_name = program_uniform_names[i];
+				if (strcmp(name_buf, uniform_name) == 0)
+				{
+					program_uniform = (ProgramUniform)i;
+					break;
+				}
+			}
+
+			if ((size_t)program_uniform < (size_t)ProgramUniform::Count)
+			{
+				out_program.uniform_locations[(size_t)program_uniform] = location;
+			}
+			else
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR, "OpenGL program uses unknown uniform '%s'.", name_buf);
+				return false;
+			}
+		}
+
+		CheckGLError("CreateProgram");
+
+		return true;
 	}
 
-	CheckGLError("CreateProgram");
-
-	return true;
-}
-
-static bool CreateShaders(ShadersData& out_shaders)
-{
-	out_shaders = {};
-	GLuint& main_vertex = out_shaders.shader_main_vertex;
-	GLuint& main_fragment_color = out_shaders.shader_main_fragment_color;
-	GLuint& main_fragment_texture = out_shaders.shader_main_fragment_texture;
-
-	main_vertex = CreateShader(GL_VERTEX_SHADER, shader_main_vertex);
-	if (!main_vertex)
+	static bool CreateShaders(ShadersData& out_shaders)
 	{
-		Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL shader: 'shader_main_vertex'.");
-		return false;
+		out_shaders = {};
+		GLuint& main_vertex = out_shaders.shader_main_vertex;
+		GLuint& main_fragment_color = out_shaders.shader_main_fragment_color;
+		GLuint& main_fragment_texture = out_shaders.shader_main_fragment_texture;
+
+		main_vertex = CreateShader(GL_VERTEX_SHADER, shader_main_vertex);
+		if (!main_vertex)
+		{
+			Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL shader: 'shader_main_vertex'.");
+			return false;
+		}
+		main_fragment_color = CreateShader(GL_FRAGMENT_SHADER, shader_main_fragment_color);
+		if (!main_fragment_color)
+		{
+			Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL shader: 'shader_main_fragment_color'.");
+			return false;
+		}
+		main_fragment_texture = CreateShader(GL_FRAGMENT_SHADER, shader_main_fragment_texture);
+		if (!main_fragment_texture)
+		{
+			Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL shader: 'shader_main_fragment_texture'.");
+			return false;
+		}
+
+		if (!CreateProgram(main_vertex, main_fragment_color, out_shaders.program_color))
+		{
+			Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL program: 'program_color'.");
+			return false;
+		}
+		if (!CreateProgram(main_vertex, main_fragment_texture, out_shaders.program_texture))
+		{
+			Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL program: 'program_texture'.");
+			return false;
+		}
+
+		return true;
 	}
-	main_fragment_color = CreateShader(GL_FRAGMENT_SHADER, shader_main_fragment_color);
-	if (!main_fragment_color)
+
+	static void DestroyShaders(ShadersData& shaders)
 	{
-		Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL shader: 'shader_main_fragment_color'.");
-		return false;
+		glDeleteProgram(shaders.program_color.id);
+		glDeleteProgram(shaders.program_texture.id);
+
+		glDeleteShader(shaders.shader_main_vertex);
+		glDeleteShader(shaders.shader_main_fragment_color);
+		glDeleteShader(shaders.shader_main_fragment_texture);
+
+		shaders = {};
 	}
-	main_fragment_texture = CreateShader(GL_FRAGMENT_SHADER, shader_main_fragment_texture);
-	if (!main_fragment_texture)
-	{
-		Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL shader: 'shader_main_fragment_texture'.");
-		return false;
-	}
-
-	if (!CreateProgram(main_vertex, main_fragment_color, out_shaders.program_color))
-	{
-		Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL program: 'program_color'.");
-		return false;
-	}
-	if (!CreateProgram(main_vertex, main_fragment_texture, out_shaders.program_texture))
-	{
-		Rml::Log::Message(Rml::Log::LT_ERROR, "Could not create OpenGL program: 'program_texture'.");
-		return false;
-	}
-
-	return true;
-}
-
-static void DestroyShaders(ShadersData& shaders)
-{
-	glDeleteProgram(shaders.program_color.id);
-	glDeleteProgram(shaders.program_texture.id);
-
-	glDeleteShader(shaders.shader_main_vertex);
-	glDeleteShader(shaders.shader_main_fragment_color);
-	glDeleteShader(shaders.shader_main_fragment_texture);
-
-	shaders = {};
-}
 
 } // namespace Gfx
 
@@ -448,7 +427,7 @@ void RenderInterface_Raylib::Clear()
 }
 
 void RenderInterface_Raylib::RenderGeometry(Rml::Vertex* vertices, int num_vertices, int* indices, int num_indices, const Rml::TextureHandle texture,
-	const Rml::Vector2f& translation)
+		const Rml::Vector2f& translation)
 {
 	Rml::CompiledGeometryHandle geometry = CompileGeometry(vertices, num_vertices, indices, num_indices, texture);
 
@@ -460,7 +439,7 @@ void RenderInterface_Raylib::RenderGeometry(Rml::Vertex* vertices, int num_verti
 }
 
 Rml::CompiledGeometryHandle RenderInterface_Raylib::CompileGeometry(Rml::Vertex* vertices, int num_vertices, int* indices, int num_indices,
-	Rml::TextureHandle texture)
+		Rml::TextureHandle texture)
 {
 	constexpr GLenum draw_usage = GL_STATIC_DRAW;
 
@@ -478,15 +457,15 @@ Rml::CompiledGeometryHandle RenderInterface_Raylib::CompileGeometry(Rml::Vertex*
 
 	glEnableVertexAttribArray((GLuint)Gfx::VertexAttribute::Position);
 	glVertexAttribPointer((GLuint)Gfx::VertexAttribute::Position, 2, GL_FLOAT, GL_FALSE, sizeof(Rml::Vertex),
-		(const GLvoid*)(offsetof(Rml::Vertex, position)));
+			(const GLvoid*)(offsetof(Rml::Vertex, position)));
 
 	glEnableVertexAttribArray((GLuint)Gfx::VertexAttribute::Color0);
 	glVertexAttribPointer((GLuint)Gfx::VertexAttribute::Color0, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Rml::Vertex),
-		(const GLvoid*)(offsetof(Rml::Vertex, colour)));
+			(const GLvoid*)(offsetof(Rml::Vertex, colour)));
 
 	glEnableVertexAttribArray((GLuint)Gfx::VertexAttribute::TexCoord0);
 	glVertexAttribPointer((GLuint)Gfx::VertexAttribute::TexCoord0, 2, GL_FLOAT, GL_FALSE, sizeof(Rml::Vertex),
-		(const GLvoid*)(offsetof(Rml::Vertex, tex_coord)));
+			(const GLvoid*)(offsetof(Rml::Vertex, tex_coord)));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * num_indices, (const void*)indices, draw_usage);
@@ -756,24 +735,26 @@ void RenderInterface_Raylib::SubmitTransformUniform(ProgramId program_id, int un
 
 bool RmlGL3::Initialize(Rml::String* out_message)
 {
-	/*
+	/* This is handled by Raylib on any platform
+	 *
+	 *
 #if defined RMLUI_PLATFORM_EMSCRIPTEN
-	if (out_message)
-		*out_message = "Started Emscripten WebGL renderer.";
+if (out_message)
+	 *out_message = "Started Emscripten WebGL renderer.";
 #else
-	const int gl_version = gladLoaderLoadGL();
-	if (gl_version == 0)
-	{
-		if (out_message)
-			*out_message = "Failed to initialize OpenGL context.";
-		return false;
-	}
+const int gl_version = gladLoaderLoadGL();
+if (gl_version == 0)
+{
+if (out_message)
+	 *out_message = "Failed to initialize OpenGL context.";
+	 return false;
+	 }
 
-	if (out_message)
-		*out_message = Rml::CreateString(128, "Loaded OpenGL %d.%d.", GLAD_VERSION_MAJOR(gl_version), GLAD_VERSION_MINOR(gl_version));
+	 if (out_message)
+	 *out_message = Rml::CreateString(128, "Loaded OpenGL %d.%d.", GLAD_VERSION_MAJOR(gl_version), GLAD_VERSION_MINOR(gl_version));
 #endif
 */
-	return true;
+return true;
 }
 
 void RmlGL3::Shutdown()
