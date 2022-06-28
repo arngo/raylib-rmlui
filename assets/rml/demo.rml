@@ -7,33 +7,50 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		background-color: #eee;
 		font-family: Exo;
 	}
 	div
 	{
-		display: block;
-		height: 150px;
-		width: 300px; 
-		background-color: #f00;
+	}
+	#speedometer
+	{
+		display: inline-block;
+		position: absolute;
+		right: 10px;
+		bottom: 10px;
+		background-color: #000;
 		font-family: Exo;
 		font-size: 30px;
-		margin: 40px;
-		padding: 45px;
+		margin: 10px;
+		padding: 25px 45px 10px 30px;
 		border: 0px;
 		border-radius: 30px;
 	}
-	p
+	#speednumbackground
 	{
+		display: inline-block;
+		font-family: Patopian 1986;
+		color: #222;
+		text-align: right;
+		font-size: 75px;
+	}
+	#speednum
+	{
+		position: absolute;
 		color: #fff;
-		font-size: 50px;
+		text-align: right;
+		font-family: Patopian 1986;
+		margin: auto;
+		margin-right: 0;
+		width: 180px;
+		margin-right: -5px;
+		margin-top: -1px;
 	}
 </style>
 </head>
 <body>
-	<div>Poggies it works</div>
-	<div>
-	<p>🥰</p>
+	<div data-model="speedometer" id="speedometer">
+		<div id="speednumbackground"><div id="speednum">{{speed}}</div>ÆÆÆÆ</div>
 	</div>
 </body>
 </rml>

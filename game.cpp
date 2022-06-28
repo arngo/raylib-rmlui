@@ -27,6 +27,27 @@
 #include <RmlUi_Platform_Raylib.h>
 #include <rlgl.h>
 
+struct UI {
+	int speed = 0;
+} ui;
+
+
+bool SetupDataBinding(Rml::Context* context, Rml::DataModelHandle& my_model);
+
+bool SetupDataBinding(Rml::Context* context, Rml::DataModelHandle& my_model)
+{
+	Rml::DataModelConstructor constructor = context->CreateDataModel("speedometer");
+	if (!constructor)
+		return false;
+
+	constructor.Bind("speed", &ui.speed);
+
+	my_model = constructor.GetModelHandle();
+
+	return true;
+
+}
+
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -39,8 +60,10 @@ int main(void)
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
+	Rml::DataModelHandle model;
+
 	//SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
-									//--------------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------
 	//auto system_interface = std::make_unique<SystemInterface_Raylib>();
 	SystemInterface_Raylib system_interface;
 	//auto render_interface = std::make_unique<RenderInterface_Raylib>();
@@ -54,13 +77,16 @@ int main(void)
 	Rml::Initialise();
 
 	Rml::Context* context = Rml::CreateContext("default", Rml::Vector2i(screenWidth, screenHeight));
-	
+
 	if (!context)
 		return 0;
+
+	SetupDataBinding(context, model);
 
 	//Rml::Debugger::Initialise(context);
 
 	Rml::LoadFontFace("assets/fonts/exo.regular.otf");
+	Rml::LoadFontFace("assets/fonts/patopian_1986.otf");
 	//Rml::LoadFontFace("assets/fonts/Blobmoji.ttf");
 
 	Rml::ElementDocument* document = context->LoadDocument("assets/rml/demo.rml");
@@ -78,12 +104,14 @@ int main(void)
 		//----------------------------------------------------------------------------------
 
 		document->ReloadStyleSheet();
+		ui.speed = GetFPS();
+		model.DirtyVariable("speed");
 		context->Update();
 		// Draw
 		//----------------------------------------------------------------------------------
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
+		ClearBackground(BLUE);
 
 		render_interface.BeginFrame();
 
