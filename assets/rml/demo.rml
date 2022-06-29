@@ -9,186 +9,205 @@
 		height: 100%;
 		font-family: Exo;
 	}
-	.wrapperspeed
-	{
+	.speedometer {
+		text-align: right;
+		font-family: Patopian 1986;
 		position: absolute;
 		right: 10px;
 		bottom: 10px;
+		background-color: black;
+		color: white;
+		font-size: 30px;
+		border-radius: 10px;
+		padding: 10px;
 	}
-	.wrappertach
-	{
+	.flex_wrap {
+		<!--
+		border-color: red;
+		border-width: 1px;
+		-->
+		display: flex;
+		justify-content: center;
+		<!-- align-items: flex-end; -->
+	}
+	.flex_child {
+	}
+	.flex_child_num {
+		margin-right: -18px;
+	}
+	.fg_elem {
+		text-align: right;
+		color: orange;
+		position: absolute;
+		right: 0;
+	}
+	.bg_elem {
+		color: rgba(255,255,255,40);
+	}
+	.bg_tach {
+	}
+	.speed {
+		width: 200px;
+	}
+	.tachometer {
+		text-align: right;
+		font-family: Patopian 1986;
 		position: absolute;
 		left: 10px;
 		bottom: 10px;
-	}
-	.speedwrapper
-	{
-		<!--
-		margin-right: -21px;
-		-->
-	}
-	.speedometer
-	{
 		background-color: black;
-		margin: 10px;
+		color: white;
+		font-size: 30px;
+		border-radius: 10px;
 		padding: 10px;
-		border: 0px;
-		border-radius: 10px;
-		width: 250px;
-		height: 50px;
-		font-size: 35px;
-		font-family: Patopian 1986;
-
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
 	}
-
-	.tachometer
-	{
-		background-color: black;
-		margin: 10px;
-		padding: 10px 20px;
-		border: 0px;
-		border-radius: 10px;
-		width: 250px;
-		height: 50px;
-		font-size: 35px;
-		font-family: Patopian 1986;
-
+	.tach {
+		width: 200px;
+		height: 32px;
 		display: flex;
 		justify-content: flex-start;
 		align-items: flex-end;
+		flex-direction: row;
+		padding: 0px 0px;
 	}
-	.speedoverlap
-	{
-		position: absolute;
-		right: 0;
-		bottom: 0;
-		<!--
-		border-width: 1px;
-		border-color: red;
-		-->
+	.tachbarouter {
+		width: 9px;
+		border-radius: 3px;
+		margin: 0px 2px;
 	}
-	.speedfg
-	{
-		color: white;
+	.tachbarinner {
+		width: 9px;
+		border-radius: 3px;
 	}
-	.speedbg
-	{
-		color: rgba(255,255,255,40);
-		<!--
-		color: rgba(0,0,0,40);
-		-->
+	.tachbaroff {
+		background-color: rgba(255,255,255,40);
 	}
-	.speedsize
-	{
+	.tachbarlowend {
+		background-color: #32CD32;
 	}
-	.tachoverlap
-	{
-		position: absolute;
-		right: 0;
-		bottom: 0;
-		border-width: 1px;
-		border-color: red;
-		width: 10px;
+	.tachbarmidend {
+		background-color: orange;
 	}
-	.tachfg
-	{
-		color: white;
-		background-color: white;
-		width: 10px;
+	.tachbarhigend {
+		background-color: red;
 	}
-	.tachbg
-	{
-		width: 10px;
-		color: rgba(255,255,255,40);
-		<!--
-		color: rgba(0,0,0,40);
-		-->
+	.tachbar1 {
+		height: 6px;
 	}
-	.tachsize
-	{
+	.tachbar2 {
+		height: 6px;
 	}
-	.tach1
-	{
+	.tachbar3 {
+		height: 7px;
+	}
+	.tachbar4 {
+		height: 8px;
+	}
+	.tachbar5 {
+		height: 10px;
+	}
+	.tachbar6 {
+		height: 12px;
+	}
+	.tachbar7 {
+		height: 14px;
+	}
+	.tachbar8 {
+		height: 17px;
+	}
+	.tachbar9 {
 		height: 20px;
 	}
-	.tach2
-	{
-		height: 40px;
+	.tachbar10 {
+		height: 24px;
 	}
-	.tach3
-	{
-		height: 60px;
+	.tachbar11 {
+		height: 28px;
+	}
+	.tachbar12 {
+		height: 33px;
+	}
+	.tachbar13 {
+		height: 33px;
+	}
+	.tachbar14 {
+		height: 33px;
+	}
+	.tachbar15 {
+		height: 33px;
 	}
 </style>
 </head>
 <body data-model="speedometer">
-	<div class="wrapperspeed">
-		<div class="speedometer" >
-			<div class="speedwrapper">
-				<div class="speedbg">
-					ÆÆÆÆ
+		<div class="speedometer">
+			<div class="flex_wrap speed">
+				<div class="flex_child flex_child_num">
+					<div class="fg_elem">
+						{{speed}}
+					</div>
+					<div class="bg_elem">
+						ÆÆÆÆ
+					</div>
 				</div>
-				<div class="speedfg speedoverlap">
-					<!--
-					-->
-					{{speed}}
-				</div>
-			</div>
-			<div class="speedwrapper">
-				<div class="speedsize">
-					æææ
-				</div>
-				<div class="speedbg speedoverlap">
-					ÆÆÆ
-				</div>
-				<div class="speedfg speedoverlap">
-					<!--
-					-->
-					FPS
+				<div class="flex_child flex_child_num">
+					<div class="fg_elem">
+						-KPH
+					</div>
+					<div class="bg_elem">
+						ÆÆÆÆ
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="wrappertach">
 		<div class="tachometer">
-			<div class="tachwrapper">
-				<div class="tachsize">
+			<div class="flex_wrap tach">
+				<div class="flex_child tachbar tachbar1 tachbarouter">
+					<div data-class-tachbaroff="!tachbar1" data-class-tachbarlowend="tachbar1" class=" fg_elem tachbar1 tachbarinner "/>
 				</div>
-				<div class="tach1 tachbg tachoverlap">
+				<div class="flex_child tachbar tachbar2 tachbarouter">
+					<div data-class-tachbaroff="!tachbar2" data-class-tachbarlowend="tachbar2" class=" fg_elem tachbar2 tachbarinner "/>
 				</div>
-				<div class="tach1 tachfg tachoverlap">
-					<!--
-					{{rpm}}
-					-->
+				<div class="flex_child tachbar tachbar3 tachbarouter">
+					<div data-class-tachbaroff="!tachbar3" data-class-tachbarlowend="tachbar3" class=" fg_elem tachbar3 tachbarinner "/>
 				</div>
-			</div>
-			<div class="tachwrapper">
-				<div class="tachsize">
+				<div class="flex_child tachbar tachbar4 tachbarouter">
+					<div data-class-tachbaroff="!tachbar4" data-class-tachbarlowend="tachbar4" class=" fg_elem tachbar4 tachbarinner "/>
 				</div>
-				<div class="tach2 tachbg tachoverlap">
+				<div class="flex_child tachbar tachbar5 tachbarouter">
+					<div data-class-tachbaroff="!tachbar5" data-class-tachbarlowend="tachbar5" class=" fg_elem tachbar5 tachbarinner "/>
 				</div>
-				<div class="tach2 tachfg tachoverlap">
-					<!--
-					{{rpm}}
-					-->
+				<div class="flex_child tachbar tachbar6 tachbarouter">
+					<div data-class-tachbaroff="!tachbar6" data-class-tachbarlowend="tachbar6" class=" fg_elem tachbar6 tachbarinner "/>
 				</div>
-			</div>
-			<div class="tachwrapper">
-				<div class="tachsize">
+				<div class="flex_child tachbar tachbar7 tachbarouter">
+					<div data-class-tachbaroff="!tachbar7" data-class-tachbarlowend="tachbar7" class=" fg_elem tachbar7 tachbarinner "/>
 				</div>
-				<div class="tach3 tachbg tachoverlap">
+				<div class="flex_child tachbar tachbar8 tachbarouter">
+					<div data-class-tachbaroff="!tachbar8" data-class-tachbarlowend="tachbar8" class=" fg_elem tachbar8 tachbarinner "/>
 				</div>
-				<div class="tach3 tachfg tachoverlap">
-					<!--
-					{{rpm}}
-					-->
+				<div class="flex_child tachbar tachbar9 tachbarouter">
+					<div data-class-tachbaroff="!tachbar9" data-class-tachbarmidend="tachbar9" class=" fg_elem tachbar9 tachbarinner "/>
+				</div>
+				<div class="flex_child tachbar tachbar10 tachbarouter">
+					<div data-class-tachbaroff="!tachbar10" data-class-tachbarmidend="tachbar10" class=" fg_elem tachbar10 tachbarinner "/>
+				</div>
+				<div class="flex_child tachbar tachbar11 tachbarouter">
+					<div data-class-tachbaroff="!tachbar11" data-class-tachbarmidend="tachbar11" class=" fg_elem tachbar11 tachbarinner "/>
+				</div>
+				<div class="flex_child tachbar tachbar12 tachbarouter">
+					<div data-class-tachbaroff="!tachbar12" data-class-tachbarhigend="tachbar12" class=" fg_elem tachbar12 tachbarinner "/>
+				</div>
+				<div class="flex_child tachbar tachbar13 tachbarouter">
+					<div data-class-tachbaroff="!tachbar13" data-class-tachbarhigend="tachbar13" class=" fg_elem tachbar13 tachbarinner "/>
+				</div>
+				<div class="flex_child tachbar tachbar14 tachbarouter">
+					<div data-class-tachbaroff="!tachbar14" data-class-tachbarhigend="tachbar14" class=" fg_elem tachbar14 tachbarinner "/>
+				</div>
+				<div class="flex_child tachbar tachbar15 tachbarouter">
+					<div data-class-tachbaroff="!tachbar15" data-class-tachbarhigend="tachbar15" class=" fg_elem tachbar15 tachbarinner "/>
 				</div>
 			</div>
 		</div>
-	</div>
 </body>
 </rml>
 
