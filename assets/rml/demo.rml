@@ -9,25 +9,27 @@
 		height: 100%;
 		font-family: Exo;
 	}
-	.center
-	{
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-	}
-	.wrapper
+	.wrapperspeed
 	{
 		position: absolute;
 		right: 10px;
 		bottom: 10px;
 	}
+	.wrappertach
+	{
+		position: absolute;
+		left: 10px;
+		bottom: 10px;
+	}
 	.speedwrapper
 	{
+		<!--
+		margin-right: -21px;
+		-->
 	}
-	#speedometer
+	.speedometer
 	{
 		background-color: black;
-		font-family: Exo;
 		margin: 10px;
 		padding: 10px;
 		border: 0px;
@@ -36,6 +38,27 @@
 		height: 50px;
 		font-size: 35px;
 		font-family: Patopian 1986;
+
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+
+	.tachometer
+	{
+		background-color: black;
+		margin: 10px;
+		padding: 10px 20px;
+		border: 0px;
+		border-radius: 10px;
+		width: 250px;
+		height: 50px;
+		font-size: 35px;
+		font-family: Patopian 1986;
+
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-end;
 	}
 	.speedoverlap
 	{
@@ -58,41 +81,113 @@
 		color: rgba(0,0,0,40);
 		-->
 	}
-	#speedsize
+	.speedsize
 	{
+	}
+	.tachoverlap
+	{
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		border-width: 1px;
+		border-color: red;
+		width: 10px;
+	}
+	.tachfg
+	{
+		color: white;
+		background-color: white;
+		width: 10px;
+	}
+	.tachbg
+	{
+		width: 10px;
+		color: rgba(255,255,255,40);
+		<!--
+		color: rgba(0,0,0,40);
+		-->
+	}
+	.tachsize
+	{
+	}
+	.tach1
+	{
+		height: 20px;
+	}
+	.tach2
+	{
+		height: 40px;
+	}
+	.tach3
+	{
+		height: 60px;
 	}
 </style>
 </head>
-<body>
-	<div class="wrapper">
-	<div class="center" data-model="speedometer" id="speedometer">
-		<div class="speedwrapper" style="margin-right:-21px;">
-			<div class="speedsize">
-				ææææ
+<body data-model="speedometer">
+	<div class="wrapperspeed">
+		<div class="speedometer" >
+			<div class="speedwrapper">
+				<div class="speedbg">
+					ÆÆÆÆ
+				</div>
+				<div class="speedfg speedoverlap">
+					<!--
+					-->
+					{{speed}}
+				</div>
 			</div>
-			<div class="speedbg speedoverlap">
-				ÆÆÆÆ
-			</div>
-			<div class="speedfg speedoverlap">
-				<!--
-				-->
-				{{speed}}
-			</div>
-		</div>
-		<div class="speedwrapper">
-			<div class="speedsize">
-				æææ
-			</div>
-			<div class="speedbg speedoverlap">
-				ÆÆÆ
-			</div>
-			<div class="speedfg speedoverlap">
-				<!--
-				-->
-				KPH
+			<div class="speedwrapper">
+				<div class="speedsize">
+					æææ
+				</div>
+				<div class="speedbg speedoverlap">
+					ÆÆÆ
+				</div>
+				<div class="speedfg speedoverlap">
+					<!--
+					-->
+					FPS
+				</div>
 			</div>
 		</div>
 	</div>
+	<div class="wrappertach">
+		<div class="tachometer">
+			<div class="tachwrapper">
+				<div class="tachsize">
+				</div>
+				<div class="tach1 tachbg tachoverlap">
+				</div>
+				<div class="tach1 tachfg tachoverlap">
+					<!--
+					{{rpm}}
+					-->
+				</div>
+			</div>
+			<div class="tachwrapper">
+				<div class="tachsize">
+				</div>
+				<div class="tach2 tachbg tachoverlap">
+				</div>
+				<div class="tach2 tachfg tachoverlap">
+					<!--
+					{{rpm}}
+					-->
+				</div>
+			</div>
+			<div class="tachwrapper">
+				<div class="tachsize">
+				</div>
+				<div class="tach3 tachbg tachoverlap">
+				</div>
+				<div class="tach3 tachfg tachoverlap">
+					<!--
+					{{rpm}}
+					-->
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 </rml>
