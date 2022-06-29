@@ -23,50 +23,74 @@
 	}
 	.speedwrapper
 	{
-		text-align: right;
 	}
 	#speedometer
 	{
-		text-align: right;
-		background-color: #000;
+		background-color: black;
 		font-family: Exo;
 		margin: 10px;
 		padding: 10px;
 		border: 0px;
-		border-radius: 30px;
-		width: 50vw;
-		height: 100px;
-	}
-	#speednumbackground
-	{
-		padding-top: 17px;
-		display: inline-block;
+		border-radius: 10px;
+		width: 250px;
+		height: 50px;
+		font-size: 35px;
 		font-family: Patopian 1986;
-		color: #222;
-		text-align: right;
-		font-size: 55px;
 	}
-	#speednum
+	.speedoverlap
 	{
-		top: 17px;
-		right: -3px;
-		display: inline-block;
 		position: absolute;
-		color: #fff;
-		text-align: right;
-		font-family: Patopian 1986;
-		width: 100%;
+		right: 0;
+		bottom: 0;
+		<!--
+		border-width: 1px;
+		border-color: red;
+		-->
+	}
+	.speedfg
+	{
+		color: white;
+	}
+	.speedbg
+	{
+		color: rgba(255,255,255,40);
+		<!--
+		color: rgba(0,0,0,40);
+		-->
+	}
+	#speedsize
+	{
 	}
 </style>
 </head>
 <body>
 	<div class="wrapper">
 	<div class="center" data-model="speedometer" id="speedometer">
-		<div class="speedwrapper">
-			<div id="speednumbackground"><div id="speednum">{{speed}}</div>ÆÆÆÆ</div>
+		<div class="speedwrapper" style="margin-right:-21px;">
+			<div class="speedsize">
+				ææææ
+			</div>
+			<div class="speedbg speedoverlap">
+				ÆÆÆÆ
+			</div>
+			<div class="speedfg speedoverlap">
+				<!--
+				-->
+				{{speed}}
+			</div>
 		</div>
 		<div class="speedwrapper">
-			<div id="speednumbackground"><div id="speednum">KPH</div>ÆÆÆ</div>
+			<div class="speedsize">
+				æææ
+			</div>
+			<div class="speedbg speedoverlap">
+				ÆÆÆ
+			</div>
+			<div class="speedfg speedoverlap">
+				<!--
+				-->
+				KPH
+			</div>
 		</div>
 	</div>
 	</div>
