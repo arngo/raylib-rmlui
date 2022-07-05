@@ -159,8 +159,10 @@ int main(void)
 
 		context->Render();
 
-		DrawText("This text is drawn from Raylib", 190, 200, 20, ORANGE);
-		DrawText("The FPS counter and the background is too", 150, 225, 20, ORANGE);
+		DrawRectangle(5, 5, 100, 25, BLACK);
+		DrawText("This text is drawn from Raylib", 150, 175, 20, ORANGE);
+		DrawText("The FPS counter and the background is too", 150, 200, 20, ORANGE);
+		DrawText("The UI however is drawn with RmlUI!", 150, 225, 20, ORANGE);
 
 		DrawFPS(10, 10);
 

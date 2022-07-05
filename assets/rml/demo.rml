@@ -21,6 +21,14 @@
 		border-radius: 10px;
 		padding: 10px;
 	}
+	.rpmtach {
+		position: absolute;
+		left: 4px;
+		top: 10px;
+	}
+	.tach_cornerlabel {
+		font-size: 16px;
+	}
 	.flex_wrap {
 		<!--
 		border-color: red;
@@ -160,6 +168,18 @@
 			</div>
 		</div>
 		<div class="tachometer">
+			<div class="rpmtach">
+			<div class="flex_wrap tach_cornerlabel">
+				<div class="flex_child flex_child_num">
+					<div class="fg_elem">
+						RPM
+					</div>
+					<div class="bg_elem">
+						ÆÆÆ
+					</div>
+				</div>
+			</div>
+			</div>
 			<div class="flex_wrap tach">
 				<div class="flex_child tachbar tachbar1 tachbarouter">
 					<div data-class-tachbaroff="!tachbar1" data-class-tachbarlowend="tachbar1" class=" fg_elem tachbar1 tachbarinner "/>
