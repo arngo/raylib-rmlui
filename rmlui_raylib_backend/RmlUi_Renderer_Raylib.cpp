@@ -109,6 +109,8 @@ void RenderInterface_Raylib::RenderGeometry(
 	unsigned int textureId = (rlTexture == nullptr) ? 0 : rlTexture->id;
 
 	rlBegin(RL_TRIANGLES);
+	rlPushMatrix();
+	rlTranslatef(translation.x, translation.y, 0);
 
 	for (unsigned int i = 0; i <= (num_indices - 3); i += 3)
 	{
@@ -132,6 +134,7 @@ void RenderInterface_Raylib::RenderGeometry(
 	}
 
 
+	rlPopMatrix();
 	rlEnd();
 }
 
