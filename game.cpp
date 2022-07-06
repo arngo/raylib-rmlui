@@ -156,8 +156,8 @@ int main(void)
 		ClearBackground(DARKGRAY);
 
 		render_interface.BeginFrame();
-
 		context->Render();
+		render_interface.EndFrame();
 
 		DrawRectangle(5, 5, 100, 25, BLACK);
 		DrawText("This text is drawn from Raylib", 150, 175, 20, ORANGE);
@@ -166,7 +166,6 @@ int main(void)
 
 		DrawFPS(10, 10);
 
-		render_interface.EndFrame();
 		EndDrawing();
 		//----------------------------------------------------------------------------------
 	}
