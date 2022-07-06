@@ -86,14 +86,13 @@ int main(void)
 		ClearBackground(RAYWHITE);
 
 		render_interface.BeginFrame();
-
 		context->Render();
+		render_interface.EndFrame();
 
 		DrawText("Congrats! You created your first window!", 190, 200, 20, ORANGE);
 
 		DrawFPS(10, 10);
 
-		render_interface.EndFrame();
 		EndDrawing();
 		//----------------------------------------------------------------------------------
 	}
