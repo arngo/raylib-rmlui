@@ -36,6 +36,7 @@
 #include <raylib.h>
 #include <rlgl.h>
 
+
 void RenderInterface_Raylib::RaylibTriangleVert(Rml::Vertex& vert)
 {
 	Color* c;
@@ -68,6 +69,7 @@ void RenderInterface_Raylib::BeginFrame()
 
 void RenderInterface_Raylib::EndFrame() 
 {
+	rlDrawRenderBatchActive();
 	rlSetTexture(0);
 	rlDisableScissorTest();
 	//rlEnableBackfaceCulling();
@@ -83,23 +85,17 @@ void RenderInterface_Raylib::RenderGeometry(
 		const Rml::Vector2f& translation
 		)
 {
-	unsigned int textureId = 0;
-	if(texture != NULL)
-	{
-		textureId = texture;
-	}
-
-	rlBegin(RL_TRIANGLES);
-	rlSetTexture(textureId);
 	rlPushMatrix();
 	rlTranslatef(translation.x, translation.y, 0);
+	rlBegin(RL_TRIANGLES);
+	rlSetTexture(texture);
 
 	for (unsigned int i = 0; i <= (num_indices - 3); i += 3)
 	{
 		if(rlCheckRenderBatchLimit(3))
 		{
 			rlBegin(RL_TRIANGLES);
-			rlSetTexture(textureId);
+			rlSetTexture(texture);
 		}
 
 		int indexA = indices[i];
@@ -116,9 +112,9 @@ void RenderInterface_Raylib::RenderGeometry(
 	}
 
 
-	rlPopMatrix();
 	rlDrawRenderBatchActive();
 	rlEnd();
+	rlPopMatrix();
 }
 
 
@@ -183,5 +179,73 @@ void RenderInterface_Raylib::SetTransform(const Rml::Matrix4f* new_transform)
 	   transform = projection * (new_transform ? *new_transform : Rml::Matrix4f::Identity());
 	   transform_dirty_state = ProgramId::All;
 	   */
+
+	/*
+	    float matfloat[16] = {
+		mat.m0, mat.m1, mat.m2, mat.m3,
+		mat.m4, mat.m5, mat.m6, mat.m7,
+		mat.m8, mat.m9, mat.m10, mat.m11,
+		mat.m12, mat.m13, mat.m14, mat.m15
+		};
+		*/
+	/*if(state.active_matrix) {
+		rlPopMatrix();
+		state.active_matrix = false;
+	}*/
+
+	if(new_transform == nullptr)
+	{
+		float matfloat[16] = { *Rml::Matrix4f::Identity().Transpose().data() };
+		
+		Matrix matrix = {
+			//matfloat[0], matfloat[4], matfloat[8], matfloat[12], 
+			//matfloat[1], matfloat[5], matfloat[9], matfloat[13], 
+			//matfloat[2], matfloat[6], matfloat[10],matfloat[14],   
+			//matfloat[3], matfloat[7], matfloat[11],matfloat[15],
+			matfloat[0], matfloat[1], matfloat[2], matfloat[3], 
+			matfloat[4], matfloat[5], matfloat[6], matfloat[7], 
+			matfloat[8], matfloat[9], matfloat[10], matfloat[11], 
+			matfloat[12], matfloat[13], matfloat[14], matfloat[15],
+			/*
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1,
+			*/
+		};
+
+		//::rlSetMatrixProjection(matrix);
+		//rlMultMatrixf(matfloat);
+		rlLoadIdentity();
+	}
+	else
+	{
+		//rlPushMatrix();
+		//state.active_matrix = true;
+		float matfloat[16] = { *(new_transform->Transpose().data()) };
+		
+		Matrix matrix = {
+			//matfloat[0], matfloat[4], matfloat[8], matfloat[12], 
+			//matfloat[1], matfloat[5], matfloat[9], matfloat[13], 
+			//matfloat[2], matfloat[6], matfloat[10],matfloat[14],   
+			//matfloat[3], matfloat[7], matfloat[11],matfloat[15],
+			matfloat[0], matfloat[1], matfloat[2], matfloat[3], 
+			matfloat[4], matfloat[5], matfloat[6], matfloat[7], 
+			matfloat[8], matfloat[9], matfloat[10], matfloat[11], 
+			matfloat[12], matfloat[13], matfloat[14], matfloat[15],
+/*
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1,
+*/
+		};
+
+		//::rlSetMatrixProjection(matrix);
+		//::rlSetUniformMatrix(1,matrix);
+		//::rlMultMatrixf(matfloat);
+		rlMultMatrixf(matfloat);
+		//rlLoadIdentity();
+	}
 }
 

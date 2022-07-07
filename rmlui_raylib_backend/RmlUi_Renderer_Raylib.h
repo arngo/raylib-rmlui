@@ -34,6 +34,9 @@
 class RenderInterface_Raylib : public Rml::RenderInterface {
 	public:
 
+		struct StateStruct {
+			bool active_matrix = false;
+		}state;
 		void RaylibTriangleVert(Rml::Vertex& vert);
 
 		RenderInterface_Raylib();
