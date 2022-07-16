@@ -68,9 +68,12 @@ class RenderInterface_Raylib : public Rml::RenderInterface {
 		static const Rml::TextureHandle TextureEnableWithoutBinding = Rml::TextureHandle(-1);
 
 	private:
-		//Rml::Matrix4f transform, projection;
-		//ProgramId transform_dirty_state = ProgramId::All;
-		//bool transform_active = false;
+        enum class ProgramId { None, Texture = 1, Color = 2, All = (Texture | Color) };
+        void SubmitTransformUniform(ProgramId program_id, int uniform_location);
+
+		Rml::Matrix4f transform, projection;
+		ProgramId transform_dirty_state = ProgramId::All;
+		bool transform_active = false;
 
 		//enum class ScissoringState { Disable, Scissor, Stencil };
 		//ScissoringState scissoring_state = ScissoringState::Disable;
