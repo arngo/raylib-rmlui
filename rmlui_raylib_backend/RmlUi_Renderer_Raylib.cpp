@@ -170,11 +170,12 @@ void RenderInterface_Raylib::RenderGeometry(
 	rlBegin(RL_TRIANGLES);
 	rlSetTexture(texture);
 
-    if (texture) {
+    //int *locs = rlGetShaderLocsDefault();
+    //SubmitTransformUniform(ProgramId::Texture, locs[RL_SHADER_LOC_MATRIX_MVP]);
+    //rlSetUniform(locs[RL_SHADER_LOC_VERTEX_POSITION], &translation.x, RL_SHADER_UNIFORM_VEC2, 1);
 
-        int *locs = rlGetShaderLocsDefault();
-        SubmitTransformUniform(ProgramId::Texture, locs[RL_SHADER_LOC_MATRIX_MVP]);
-    }   
+    SubmitTransformUniform(ProgramId::Texture, rlGetLocationUniform(rlGetShaderIdDefault(), "mvp"));
+    rlSetUniform(rlGetLocationAttrib(rlGetShaderIdDefault(), "vertexPosition"), &translation.x, RL_SHADER_UNIFORM_VEC2, 1);
 
 	for (unsigned int i = 0; i <= (num_indices - 3); i += 3)
 	{
@@ -262,96 +263,12 @@ void RenderInterface_Raylib::SetTransform(const Rml::Matrix4f* new_transform)
 {
 	transform_active = (new_transform != nullptr);
 	transform = projection * (new_transform ? *new_transform : Rml::Matrix4f::Identity());
-	transform_dirty_state = ProgramId::All;
-	/*
-	   transform_active = (new_transform != nullptr);
-	   transform = projection * (new_transform ? *new_transform : Rml::Matrix4f::Identity());
-	   transform_dirty_state = ProgramId::All;
-	   */
-
-	/*
-	    float matfloat[16] = {
-		mat.m0, mat.m1, mat.m2, mat.m3,
-		mat.m4, mat.m5, mat.m6, mat.m7,
-		mat.m8, mat.m9, mat.m10, mat.m11,
-		mat.m12, mat.m13, mat.m14, mat.m15
-		};
-		*/
-	/*if(state.active_matrix) {
-		rlPopMatrix();
-		state.active_matrix = false;
-	}*/
-/*
-    unsigned int vShaderId = rlCompileShader(defaultVShaderCode, GL_VERTEX_SHADER);     // Compile default vertex shader
-    unsigned int fShaderId = rlCompileShader(defaultFShaderCode, GL_FRAGMENT_SHADER);   // Compile default fragment shader
-    unsigned int defaultShaderId = rlLoadShaderProgram(vShaderId, fShaderId);
-
-    SetShaderValue(Shader shader, int locIndex, const void *value, int uniformType);
-
-    int uniform_location_mvp = rlGetLocationUniform(defaultShaderId, "mvp");
-
-	if(new_transform == nullptr)
-	{
-		float matfloat[16] = { *Rml::Matrix4f::Identity().Transpose().data() };
-		
-		Matrix matrix = {
-			//matfloat[0], matfloat[4], matfloat[8], matfloat[12], 
-			//matfloat[1], matfloat[5], matfloat[9], matfloat[13], 
-			//matfloat[2], matfloat[6], matfloat[10],matfloat[14],   
-			//matfloat[3], matfloat[7], matfloat[11],matfloat[15],
-			matfloat[0], matfloat[1], matfloat[2], matfloat[3], 
-			matfloat[4], matfloat[5], matfloat[6], matfloat[7], 
-			matfloat[8], matfloat[9], matfloat[10], matfloat[11], 
-			matfloat[12], matfloat[13], matfloat[14], matfloat[15],
-            */
-			/*
-			1, 0, 0, 0,
-			0, 1, 0, 0,
-			0, 0, 1, 0,
-			0, 0, 0, 1,
-			*/
-		/*};
-
-		//::rlSetMatrixProjection(matrix);
-		//rlMultMatrixf(matfloat);
-		rlLoadIdentity();
-	}
-	else
-	{
-		//rlPushMatrix();
-		//state.active_matrix = true;
-		float matfloat[16] = { *(new_transform->Transpose().data()) };
-		
-		Matrix matrix = {
-			//matfloat[0], matfloat[4], matfloat[8], matfloat[12], 
-			//matfloat[1], matfloat[5], matfloat[9], matfloat[13], 
-			//matfloat[2], matfloat[6], matfloat[10],matfloat[14],   
-			//matfloat[3], matfloat[7], matfloat[11],matfloat[15],
-			matfloat[0], matfloat[1], matfloat[2], matfloat[3], 
-			matfloat[4], matfloat[5], matfloat[6], matfloat[7], 
-			matfloat[8], matfloat[9], matfloat[10], matfloat[11], 
-			matfloat[12], matfloat[13], matfloat[14], matfloat[15],
-            */
-/*
-			1, 0, 0, 0,
-			0, 1, 0, 0,
-			0, 0, 1, 0,
-			0, 0, 0, 1,
-*/
-		/*};
-
-		//::rlSetMatrixProjection(matrix);
-		//::rlSetUniformMatrix(1,matrix);
-		//::rlMultMatrixf(matfloat);
-		//rlMultMatrixf(matfloat);
-		//rlLoadIdentity();
-    }
-	*/
+	transform_dirty_state = ProgramId::Texture;
 }
 
 void RenderInterface_Raylib::SubmitTransformUniform(ProgramId program_id, int uniform_location)
 {
-	if ((int)program_id & (int)transform_dirty_state)
+    if ((int)program_id & (int)transform_dirty_state)
 	{
         float matfloat[16] = { *(transform.data()) };
         
