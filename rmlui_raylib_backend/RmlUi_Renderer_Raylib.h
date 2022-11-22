@@ -34,6 +34,8 @@
 class RenderInterface_Raylib : public Rml::RenderInterface {
 	public:
 
+		bool is_projecting = false;
+
 		void RaylibTriangleVert(Rml::Vertex& vert);
 
 		RenderInterface_Raylib();

@@ -88,8 +88,9 @@ int main(void)
 		render_interface.BeginFrame();
 		context->Render();
 		render_interface.EndFrame();
+		rlLoadIdentity();
 
-		DrawText("Congrats! You created your first window!", 190, 200, 20, ORANGE);
+		//DrawText("Congrats! You created your first window!", 190, 200, 20, ORANGE);
 
 		DrawFPS(10, 10);
 

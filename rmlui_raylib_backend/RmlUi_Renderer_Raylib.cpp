@@ -68,6 +68,13 @@ void RenderInterface_Raylib::BeginFrame()
 
 void RenderInterface_Raylib::EndFrame() 
 {
+	//if(is_projecting)
+	//{
+	//	rlMatrixMode(RL_PROJECTION);
+	//	rlPopMatrix();
+	//	rlMatrixMode(RL_MODELVIEW);
+	//	is_projecting = false;
+	//}
 	rlSetTexture(0);
 	rlDisableScissorTest();
 	//rlEnableBackfaceCulling();
@@ -178,6 +185,33 @@ void RenderInterface_Raylib::ReleaseTexture(Rml::TextureHandle texture_handle)
 
 void RenderInterface_Raylib::SetTransform(const Rml::Matrix4f* new_transform)
 {
+	if(new_transform != nullptr)
+	{
+		//if(!is_projecting)
+		//{
+		//	rlMatrixMode(RL_PROJECTION);
+		//	rlPushMatrix();
+		//	rlLoadIdentity();
+		//	rlFrustum(0.0, viewport_width, 0.0, viewport_height, -100.0, 100.0);
+		//	rlMatrixMode(RL_MODELVIEW);
+		//	is_projecting = true;
+		//}
+		//rlLoadIdentity();
+		float mat[16];
+		memcpy(mat, new_transform->data(), sizeof(mat));
+		rlMultMatrixf(mat);
+	}
+	else
+	{
+		//if(is_projecting)
+		//{
+		//	rlMatrixMode(RL_PROJECTION);
+		//	rlPopMatrix();
+		//	rlMatrixMode(RL_MODELVIEW);
+		//	is_projecting = false;
+		//}
+		//rlLoadIdentity();
+	}
 	/*
 	   transform_active = (new_transform != nullptr);
 	   transform = projection * (new_transform ? *new_transform : Rml::Matrix4f::Identity());

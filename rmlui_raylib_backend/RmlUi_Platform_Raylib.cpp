@@ -8,5 +8,5 @@
 
 double SystemInterface_Raylib::GetElapsedTime()
 {
-	return double(GetTime()) / 1000.0;
+	return double(GetTime());
 }
