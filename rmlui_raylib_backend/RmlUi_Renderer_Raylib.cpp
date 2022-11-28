@@ -200,6 +200,8 @@ void RenderInterface_Raylib::SetTransform(const Rml::Matrix4f* new_transform)
 		float mat[16];
 		memcpy(mat, new_transform->data(), sizeof(mat));
 		rlMultMatrixf(mat);
+		//rlScalef(1.0,1.0,0.001);
+		//rlTranslatef(0.0,0.0,100.0);
 	}
 	else
 	{
@@ -210,7 +212,7 @@ void RenderInterface_Raylib::SetTransform(const Rml::Matrix4f* new_transform)
 		//	rlMatrixMode(RL_MODELVIEW);
 		//	is_projecting = false;
 		//}
-		//rlLoadIdentity();
+		rlLoadIdentity();
 	}
 	/*
 	   transform_active = (new_transform != nullptr);

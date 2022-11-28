@@ -20,12 +20,12 @@
  ********************************************************************************************/
 #define RMLUI_STATIC_LIB
 
-#include <raylib.h>
-#include <RmlUi/Core.h>
+#include "raylib.h"
+#include "RmlUi/Core.h"
 //#include <RmlUi/Debugger.h>
-#include <RmlUi_Renderer_Raylib.h>
-#include <RmlUi_Platform_Raylib.h>
-#include <rlgl.h>
+#include "RmlUi_Renderer_Raylib.h"
+#include "RmlUi_Platform_Raylib.h"
+#include "rlgl.h"
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -34,8 +34,8 @@ int main(void)
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	const int screenWidth = 800;
-	const int screenHeight = 450;
+	const int screenWidth = 250;
+	const int screenHeight = 250;
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
