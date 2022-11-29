@@ -34,13 +34,19 @@ int main(void)
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	const int screenWidth = 250;
-	const int screenHeight = 250;
+	const int renderTargetWidth = 250;
+	const int renderTargetHeight = 250;
+	const int screenWidth = renderTargetWidth * 3;
+	const int screenHeight = renderTargetHeight * 3;
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
 	//SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
 									//--------------------------------------------------------------------------------------
+	RenderTexture2D render_texture = LoadRenderTexture(
+			renderTargetWidth,
+			renderTargetHeight
+			);
 	//auto system_interface = std::make_unique<SystemInterface_Raylib>();
 	SystemInterface_Raylib system_interface;
 	//auto render_interface = std::make_unique<RenderInterface_Raylib>();
@@ -53,7 +59,7 @@ int main(void)
 
 	Rml::Initialise();
 
-	Rml::Context* context = Rml::CreateContext("default", Rml::Vector2i(screenWidth, screenHeight));
+	Rml::Context* context = Rml::CreateContext("default", Rml::Vector2i(renderTargetWidth, renderTargetHeight));
 	
 	if (!context)
 		return 0;
@@ -81,9 +87,8 @@ int main(void)
 		context->Update();
 		// Draw
 		//----------------------------------------------------------------------------------
-		BeginDrawing();
-
-		ClearBackground(RAYWHITE);
+		BeginTextureMode(render_texture);
+		ClearBackground(BLANK);
 
 		render_interface.BeginFrame();
 		context->Render();
@@ -94,6 +99,18 @@ int main(void)
 
 		DrawFPS(10, 10);
 
+		EndTextureMode();
+		// ---
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+		DrawTexturePro(
+				render_texture.texture,
+				(Rectangle) { .x = 0, .y = 0, .width = renderTargetWidth, .height = -renderTargetHeight},
+				(Rectangle) { .x = 0, .y = 0, .width = screenWidth, .height = screenHeight },
+				(Vector2) { .x = 0, .y = 0 },
+				0,
+				WHITE
+				);
 		EndDrawing();
 		//----------------------------------------------------------------------------------
 	}
