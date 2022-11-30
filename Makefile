@@ -82,6 +82,10 @@ run: build/tux/game
 .PHONY: web
 web: build/web/index.html
 
+.PHONY: serve
+serve: web
+	ruby -run -ehttpd build/web -p8000
+
 .PHONY: clean
 clean:
 	rm -r build
