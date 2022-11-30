@@ -31,6 +31,8 @@
 
 RenderTexture2D render_texture;
 
+int gameState = 0;
+
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -90,8 +92,10 @@ int main(void)
 		//----------------------------------------------------------------------------------
 		BeginTextureMode(render_texture);
 		ClearBackground(BLANK);
-		if(logoState.state != 4) {
-			playLogoAnimation(&logoState);
+		if(gameState == 0) {
+			if(playLogoAnimation(&logoState)) {
+				gameState += 1;
+			}
 		}
 		else {
 			document->ReloadStyleSheet();

@@ -13,7 +13,7 @@ int func()
 
 
 
-void playLogoAnimation(struct logoStateStruct *stateStruct) {
+bool playLogoAnimation(struct logoStateStruct *stateStruct) {
 	int logoPositionX = renderTargetWidth/2 - 128;
 	int logoPositionY = renderTargetHeight/2 - 128;
 
@@ -96,5 +96,15 @@ void playLogoAnimation(struct logoStateStruct *stateStruct) {
 
 		DrawText(TextSubtext("raylib", 0, stateStruct->lettersCount), renderTargetWidth/2 - 44, renderTargetHeight/2 + 48, 50, Fade(BLACK, stateStruct->alpha));
 	}
+
+	if(stateStruct->state == 4)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
 }
 

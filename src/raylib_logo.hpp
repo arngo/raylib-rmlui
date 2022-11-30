@@ -17,6 +17,6 @@ typedef struct logoStateStruct {
 	float alpha = 1.0f;
 } logoStateStruct;
 
-void playLogoAnimation(struct logoStateStruct *stateStruct);
+bool playLogoAnimation(struct logoStateStruct *stateStruct);
 
 int func();
