@@ -3,6 +3,7 @@ COMPILING_CORES ?= 2
 
 TUX_DIR := vendor/tux
 WEB_DIR := vendor/web
+SRC_DIR := src
 
 RMLUI_LIB := lib/RmlUi/libRmlCore.a
 RAYLIB_LIB := lib/libraylib.a:
@@ -13,13 +14,13 @@ RMLUI_WEB_LIB := $(addprefix $(WEB_DIR), /lib/RmlUi/libRmlCore.a)
 RAYLIB_WEB_LIB := $(addprefix $(WEB_DIR), /lib/libraylib.a)
 
 
-build/tux/game: game.cpp $(RAYLIB_TUX_LIB) $(RMLUI_TUX_LIB)
+build/tux/game: $(SRC_DIR)/main.cpp $(RAYLIB_TUX_LIB) $(RMLUI_TUX_LIB)
 	mkdir -p build/tux
-	g++ -o build/tux/game game.cpp rmlui_raylib_backend/RmlUi_Platform_Raylib.cpp rmlui_raylib_backend/RmlUi_Renderer_Raylib.cpp -Irmlui_raylib_backend/ -Iraylib/src/ -IRmlUi/Include/ $(RAYLIB_TUX_LIB) $(RMLUI_TUX_LIB) -lfreetype -lGL -lm -lpthread -ldl -lrt -lX11 -DPLATFORM_DESKTOP
+	g++ -o build/tux/game $(SRC_DIR)/main.cpp rmlui_raylib_backend/RmlUi_Platform_Raylib.cpp rmlui_raylib_backend/RmlUi_Renderer_Raylib.cpp -Irmlui_raylib_backend/ -Iraylib/src/ -IRmlUi/Include/ $(RAYLIB_TUX_LIB) $(RMLUI_TUX_LIB) -lfreetype -lGL -lm -lpthread -ldl -lrt -lX11 -DPLATFORM_DESKTOP
 
-build/web/index.html: game.cpp $(RAYLIB_WEB_LIB) $(RMLUI_WEB_LIB)
+build/web/index.html: $(SRC_DIR)/main.cpp $(RAYLIB_WEB_LIB) $(RMLUI_WEB_LIB)
 	mkdir -p build/web
-	em++ -o build/web/index.html game.cpp rmlui_raylib_backend/RmlUi_Platform_Raylib.cpp rmlui_raylib_backend/RmlUi_Renderer_Raylib.cpp -Os -Wall -I. -Irmlui_raylib_backend/ -Iraylib/src/ -IRmlUi/Include/ -L. $(RAYLIB_WEB_LIB) $(RMLUI_WEB_LIB) -s USE_GLFW=3 -s ASYNCIFY --shell-file vendor/shell.html --preload-file assets -s TOTAL_MEMORY=67108864 -DPLATFORM_WEB -s USE_FREETYPE=1
+	em++ -o build/web/index.html $(SRC_DIR)/main.cpp rmlui_raylib_backend/RmlUi_Platform_Raylib.cpp rmlui_raylib_backend/RmlUi_Renderer_Raylib.cpp -Os -Wall -I. -Irmlui_raylib_backend/ -Iraylib/src/ -IRmlUi/Include/ -L. $(RAYLIB_WEB_LIB) $(RMLUI_WEB_LIB) -s USE_GLFW=3 -s ASYNCIFY --shell-file vendor/shell.html --preload-file assets -s TOTAL_MEMORY=67108864 -DPLATFORM_WEB -s USE_FREETYPE=1
 
 $(RAYLIB_TUX_LIB):
 	mkdir -p vendor/tux/lib
