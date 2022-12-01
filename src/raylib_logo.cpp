@@ -11,7 +11,8 @@ int func()
 	return 0;
 }
 
-
+int gameState = 0;
+logoStateStruct logoState = { 0 };
 
 bool playLogoAnimation(struct logoStateStruct *stateStruct) {
 	int logoPositionX = renderTargetWidth/2 - 128;

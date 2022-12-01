@@ -67,8 +67,8 @@
             <button>
             this is button
             </button>
-            <button>
-            this is other button
+            <button id="reset">
+            this is reset button
             </button>
         </div>
         <div>

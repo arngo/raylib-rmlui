@@ -29,11 +29,10 @@
 
 #include "raylib_logo.hpp"
 #include "input.hpp"
+#include "event_listeners.hpp"
 
 RenderTexture2D render_texture;
 
-int gameState = 1;
-logoStateStruct logoState = { 0 };
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -79,6 +78,10 @@ int main(void)
 		document->Show();
 	else
 		return 0;
+
+    auto resetListener = std::make_unique<ResetListener>();
+    Rml::Element *resetBtn = document->GetElementById("reset");
+    resetBtn->AddEventListener(Rml::EventId::Click, resetListener.get(), false);
 
 
 	SetTargetFPS(60);
