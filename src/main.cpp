@@ -33,6 +33,7 @@
 RenderTexture2D render_texture;
 
 int gameState = 1;
+logoStateStruct logoState = { 0 };
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -44,7 +45,6 @@ int main(void)
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
-	logoStateStruct logoState = { 0 };
 
 	//--------------------------------------------------------------------------------------
 	render_texture = LoadRenderTexture(
@@ -72,6 +72,7 @@ int main(void)
 
 	Rml::LoadFontFace("assets/fonts/exo.regular.otf");
 	//Rml::LoadFontFace("assets/fonts/Blobmoji.ttf");
+	Rml::LoadFontFace("assets/fonts/DigitalDisco.ttf");
 
 	Rml::ElementDocument* document = context->LoadDocument("assets/rml/demo.rml");
 	if (document)
