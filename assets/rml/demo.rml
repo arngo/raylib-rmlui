@@ -61,12 +61,13 @@
         background-color: orange;
     }
 	button .menu_button {
-		transition: transform 0.1s sine-out;
+        transition: transform 0.4s bounce-out;
 	}
     button:hover {
 		background-color: #3e8e41;
 	}
 	button:hover .menu_button {
+        transition: transform 0.1s sine-out;
 		transform: translateX(10px);
 	}
     button:active {background-color: #41ff41}
