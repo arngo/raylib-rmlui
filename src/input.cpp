@@ -1,4 +1,5 @@
 #include "input.hpp"
+#include "globals.hpp"
 #include "raylib.h"
 
 void ProcessMouseInput(Rml::Context *context) {
@@ -16,6 +17,8 @@ void ProcessMouseInput(Rml::Context *context) {
     }
     Vector2 mouseDelta = GetMouseDelta();
     if (mouseDelta.x != 0 || mouseDelta.y != 0) {
-        context->ProcessMouseMove(GetMouseX()/3, GetMouseY()/3, 0);
+        if (menuState != FADEOUT) {
+            context->ProcessMouseMove(GetMouseX()/3, GetMouseY()/3, 0);
+        }
     }
 }

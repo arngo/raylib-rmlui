@@ -1,18 +1,15 @@
 #include "raylib.h"
 #include "raylib_logo.hpp"
+#include "globals.hpp"
 
 #include <cstdio>
 
-struct logoStateStruct;
 
 int func()
 {
 	puts("test");
 	return 0;
 }
-
-int gameState = 0;
-logoStateStruct logoState = { 0 };
 
 bool playLogoAnimation(struct logoStateStruct *stateStruct) {
 	int logoPositionX = renderTargetWidth/2 - 128;

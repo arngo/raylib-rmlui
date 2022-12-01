@@ -1,7 +1,18 @@
 #include <iostream>
 #include "event_listeners.hpp"
 #include "raylib_logo.hpp"
+#include "globals.hpp"
+
 void ResetListener::ProcessEvent(Rml::Event &event) {
-    gameState = 0;
+    gameState = LOGO;
     logoState = { 0 };
+}
+
+void StartListener::ProcessEvent(Rml::Event &event) {
+    menuState = FADEOUT_START;
+}
+
+void MenuAnimationListener::ProcessEvent(Rml::Event &event) {
+    menuState = INVISIBLE;
+    std::cout << "anim end" << std::endl;
 }
