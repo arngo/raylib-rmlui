@@ -79,9 +79,9 @@ int main(void)
 	else
 		return 0;
 
-    auto resetListener = std::make_unique<ResetListener>();
-    Rml::Element *resetBtn = document->GetElementById("reset");
-    resetBtn->AddEventListener(Rml::EventId::Click, resetListener.get(), false);
+	auto resetListener = std::make_unique<ResetListener>();
+	Rml::Element *resetBtn = document->GetElementById("reset");
+	resetBtn->AddEventListener(Rml::EventId::Click, resetListener.get(), false);
 
 
 	SetTargetFPS(60);
@@ -92,7 +92,7 @@ int main(void)
 		//----------------------------------------------------------------------------------
 		// TODO: Update your variables here
 		//----------------------------------------------------------------------------------
-        ProcessMouseInput(context);
+		ProcessMouseInput(context);
 
 
 		// Draw
@@ -102,6 +102,11 @@ int main(void)
 		if(gameState == 0) {
 			if(playLogoAnimation(&logoState)) {
 				gameState += 1;
+				document->Close();
+				document = context->LoadDocument("assets/rml/demo.rml");
+				document->Show();
+				resetBtn = document->GetElementById("reset");
+				resetBtn->AddEventListener(Rml::EventId::Click, resetListener.get(), false);
 			}
 		}
 		else {
@@ -115,7 +120,7 @@ int main(void)
 
 			//DrawText("Congrats! You created your first window!", 190, 200, 20, ORANGE);
 
-			DrawFPS(10, 10);
+			//DrawFPS(10, 10);
 		}
 		EndTextureMode();
 		// ---

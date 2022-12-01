@@ -1,0 +1,72 @@
+<rml>
+<head>
+<title>Example</title>
+<style>
+	body
+	{
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		font-family: DigitalDisco;
+	}
+@keyframes animate {
+    0% {
+        transform: rotateX(0deg);
+		background-color: orange;
+    }
+    10% {
+        transform: rotateX(0deg);
+		background-color: orange;
+    }
+    50% {
+        transform: rotateX(-30deg);
+		background-color: blue;
+    }
+    90% {
+        transform: rotateX(0deg);
+		background-color: orange;
+    }
+    100% {
+        transform: rotateX(0deg);
+		background-color: orange;
+    }
+}
+	div
+	{
+		font-family: DigitalDisco;
+		display: block;
+		background-color: #f00;
+		font-size: 16px;
+		border: 1px;
+		border-radius: 30px;
+		border-color: red;
+	}
+	p
+	{
+		font-family: DigitalDisco;
+		color: #fff;
+		font-size: 16px;
+	}
+    button {
+		font-size: 16px;
+		font-family: DigitalDisco;
+        color: black;
+        background-color: orange;
+    }
+    button:hover {background-color: #3e8e41}
+    button:active {background-color: #41ff41}
+</style>
+<!-- animation: 2s linear infinite animate; -->
+</head>
+<body>
+        <div>
+            <button>
+            Play
+            </button>
+            <button id="reset">
+            Reset
+            </button>
+        </div>
+</body>
+</rml>
+

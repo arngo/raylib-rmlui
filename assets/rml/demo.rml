@@ -9,40 +9,40 @@
 		height: 100%;
 		font-family: DigitalDisco;
 	}
-@keyframes animate {
-    0% {
-        transform: rotateX(0deg);
-		background-color: orange;
-    }
-    10% {
-        transform: rotateX(0deg);
-		background-color: orange;
-    }
-    50% {
-        transform: rotateX(-30deg);
-		background-color: blue;
-    }
-    90% {
-        transform: rotateX(0deg);
-		background-color: orange;
-    }
-    100% {
-        transform: rotateX(0deg);
-		background-color: orange;
-    }
-}
-	div
+	@keyframes hover_button {
+		0% {
+			transform: translateX(0px);
+		}
+		5% {
+			transform: translateX(20px);
+		}
+		100% {
+			transform: translateX(0px);
+		}
+	}
+	@keyframes intro_main {
+		0% {
+			transform: translateX(-30vw);
+			opacity: 0;
+		}
+		5% {
+			transform: translateX(-30vw);
+			opacity: 0.2;
+		}
+		100% {
+			transform: translateX(0vw);
+			opacity: 1;
+		}
+	}
+	div.menu_wrapper
 	{
+		margin-top: 64px;
 		font-family: DigitalDisco;
 		display: block;
-		height: 150px;
-		width: 150px; 
-		background-color: #f00;
+		background-color: #20b2a0;
 		font-size: 16px;
-		margin: 35px;
-		padding: 25px;
-		border: 0px;
-		border-radius: 30px;
+		width: 130vw;
+		animation: 1s cubic-out intro_main;
 	}
 	p
 	{
@@ -51,28 +51,37 @@
 		font-size: 16px;
 	}
     button {
+		display: block;
+		margin: 10px 0;
+		padding: 2px;
+		max-width: 64px;
 		font-size: 16px;
 		font-family: DigitalDisco;
         color: black;
         background-color: orange;
     }
-    button:hover {background-color: #3e8e41}
+    button:hover {
+		background-color: #3e8e41;
+	}
+	button:hover .menu_button {
+		animation: 0.5s bounce-out hover_button;
+	}
     button:active {background-color: #41ff41}
 </style>
 <!-- animation: 2s linear infinite animate; -->
 </head>
 <body>
-        <div>
-			<p>Does it work? Yes :)</p>
+        <div class="menu_wrapper">
             <button>
-            this is button
+			<div class="menu_button">
+            Play
+			</div>
             </button>
             <button id="reset">
-            this is reset button
+			<div class="menu_button">
+            Reset
+			</div>
             </button>
-        </div>
-        <div>
-        <p>Yes it does</p>
         </div>
 </body>
 </rml>
