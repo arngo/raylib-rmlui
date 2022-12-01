@@ -28,10 +28,11 @@
 #include "rlgl.h"
 
 #include "raylib_logo.hpp"
+#include "input.hpp"
 
 RenderTexture2D render_texture;
 
-int gameState = 0;
+int gameState = 1;
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -87,6 +88,8 @@ int main(void)
 		//----------------------------------------------------------------------------------
 		// TODO: Update your variables here
 		//----------------------------------------------------------------------------------
+        ProcessMouseInput(context);
+
 
 		// Draw
 		//----------------------------------------------------------------------------------

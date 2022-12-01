@@ -49,14 +49,29 @@
 		color: #fff;
 		font-size: 50px;
 	}
+    button {
+        color: #0000ff;
+        background-color: #000080;
+        height: 25px;
+        width: 25px;
+    }
+    button:hover {background-color: #3e8e41}
+    button:active {background-color: #00ff00}
 </style>
 <!-- animation: 2s linear infinite animate; -->
 </head>
 <body>
-	<div>Does it work? Yes :)</div>
-	<div>
-	<p>Yes it does</p>
-	</div>
+        <div>Does it work? Yes :)
+            <button>
+            this is button
+            </button>
+            <button>
+            this is other button
+            </button>
+        </div>
+        <div>
+        <p>Yes it does</p>
+        </div>
 </body>
 </rml>
 
