@@ -135,8 +135,7 @@ int main(void)
             menu = document->GetElementById("menu");
             if (menuState == FADEOUT_START) {
                 menuState = FADEOUT;
-                menu->AddEventListener(Rml::EventId::Transitionend, menuAnimListener.get(), false);
-                menu->SetProperty("opacity", "0");
+                menu->AddEventListener(Rml::EventId::Animationend, menuAnimListener.get(), false);
                 menu->SetProperty("animation", "1s cubic-out outro_main");
                 resetBtn->RemoveEventListener(Rml::EventId::Click, resetListener.get(), false);
                 playBtn->RemoveEventListener(Rml::EventId::Click, startListener.get(), false);
@@ -146,7 +145,7 @@ int main(void)
                 //menu->SetClass("fade", true);
                 std::cout << "start fadeout" << std::endl;
             } else if (menuState == INVISIBLE) {
-                menu->RemoveEventListener(Rml::EventId::Transitionend, menuAnimListener.get(), false);
+                menu->RemoveEventListener(Rml::EventId::Animationend, menuAnimListener.get(), false);
 				document->Close();
                 gameState = GAME;
             }
